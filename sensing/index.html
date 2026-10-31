@@ -3,318 +3,401 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>林野感測站｜森林遊憩新世代感測技術平台</title>
+<title>林野感測站｜森林遊憩新世代感測技術學習平台</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#f5f3ec;--card:#fffdf8;--ink:#1f2723;--muted:#5f6a63;--green:#2f5d50;--green2:#e3ece6;--accent:#b8743a;--line:#e0dccf;--warn:#9a3b2f}
+:root{--paper:#f5f3ec;--card:#fffdf8;--ink:#1f2723;--muted:#5f6a63;--green:#2f5d50;--green2:#e3ece6;--accent:#b8743a;--acc2:#f3e6d8;--blue:#2e6b8a;--blue2:#e1edf3;--line:#e0dccf;--warn:#9a3b2f}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
 body{margin:0;font-family:'Noto Sans TC',system-ui,sans-serif;color:var(--ink);background:var(--paper);font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased}
 a{color:var(--green)}
 header.top{position:sticky;top:0;z-index:10;background:rgba(245,243,236,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
-.bar{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:12px 22px}
+.bar{max-width:1160px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:12px 22px}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
 .logo b{font-family:'Noto Serif TC',serif;font-size:20px;color:var(--green)}
 .logo small{font-size:12px;color:var(--muted);display:block;line-height:1.3}
 nav.main{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
 nav.main a{text-decoration:none;color:var(--ink);font-size:14.5px;font-weight:500;padding:7px 12px;border-radius:999px}
 nav.main a.on,nav.main a:hover{background:var(--green);color:#fff}
-main{max-width:1120px;margin:0 auto;padding:30px 22px 70px}
+main{max-width:1160px;margin:0 auto;padding:30px 22px 70px}
 h1,h2,h3{font-family:'Noto Serif TC',serif;line-height:1.35}
-h1{font-size:36px;margin:8px 0 12px;color:var(--green)}
-h2{font-size:26px;margin:40px 0 12px}
-h3{font-size:19px;margin:0 0 6px}
+h1{font-size:34px;margin:8px 0 12px;color:var(--green)}
+h2{font-size:25px;margin:38px 0 10px}
+h3{font-size:18px;margin:0 0 4px}
 .eyebrow{font-size:12px;letter-spacing:.22em;font-weight:700;color:var(--accent)}
-.lead{font-size:17px;color:#3a443e;max-width:760px}
-.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:34px;align-items:center;padding:20px 0 10px}
-.hero .box{background:var(--green);color:#eef4ef;border-radius:20px;padding:24px 26px}
-.hero .box h3{color:#fff}
-.hero .box ol{margin:8px 0 0;padding-left:20px;font-size:14.5px}
-.doors{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
-.door{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;text-decoration:none;color:var(--ink);transition:transform .15s,box-shadow .15s}
-.door:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(30,50,40,.1)}
-.door b{display:block;font-size:17px;color:var(--green);margin-bottom:4px}
-.door span{font-size:13.5px;color:var(--muted);line-height:1.6;display:block}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
-.tcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;text-decoration:none;color:var(--ink);display:flex;gap:14px;align-items:flex-start;transition:box-shadow .15s}
-.tcard:hover{box-shadow:0 8px 22px rgba(30,50,40,.1)}
-.ico{flex:none;width:46px;height:46px;border-radius:12px;background:var(--green2);display:flex;align-items:center;justify-content:center}
-.ico svg{width:28px;height:28px;stroke:var(--green);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.tcard b{display:block;font-size:16px;line-height:1.4}
-.tcard span{font-size:13px;color:var(--muted);line-height:1.55;display:block;margin-top:3px}
-.votes{display:inline-block;font-size:11.5px;font-weight:700;color:var(--accent);margin-top:6px}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
-.chip{font-size:12.5px;padding:3px 10px;border-radius:999px;background:var(--green2);color:var(--green);text-decoration:none;font-weight:500}
-.chip.alt{background:#f3e6d8;color:#8a5426}
-.prob{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:14px}
-.prob .head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
-.prob .n{font-size:13px;color:var(--accent);font-weight:700;white-space:nowrap}
-.prob p{margin:6px 0 4px;font-size:14.5px;color:#3a443e}
-.meter{height:6px;background:#ebe7da;border-radius:3px;margin:8px 0 2px;overflow:hidden}.meter i{display:block;height:100%;background:var(--accent)}
-.detail{display:grid;grid-template-columns:1fr 300px;gap:30px}
-.sec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 22px;margin-bottom:14px}
-.sec h4{margin:0 0 6px;font-size:14px;letter-spacing:.08em;color:var(--green)}
-.sec.no h4{color:var(--warn)}
-.sec ul{margin:0;padding-left:20px}.sec li{margin:3px 0}
-.side .sec{position:sticky;top:80px}
-.side dl{margin:0;font-size:14px}.side dt{color:var(--muted);font-size:12.5px;margin-top:10px}.side dd{margin:2px 0 0}
-.back{display:inline-block;margin-bottom:10px;font-size:14px;text-decoration:none;color:var(--muted)}
-.case{display:grid;grid-template-columns:1fr 1.1fr;gap:24px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:18px;align-items:center}
-.case img{width:100%;border-radius:12px;border:1px solid var(--line);display:block;background:#fff}
-.btn{display:inline-block;background:var(--green);color:#fff;text-decoration:none;font-weight:700;padding:10px 18px;border-radius:999px;font-size:14.5px;margin-top:8px}
+.lead{font-size:17px;color:#3a443e;max-width:800px}
+.note{font-size:13px;color:var(--muted);line-height:1.8}
+.btn{display:inline-block;background:var(--green);color:#fff;text-decoration:none;font-weight:700;padding:10px 18px;border-radius:999px;font-size:14.5px;margin-top:8px;border:0;cursor:pointer}
 .btn.ghost{background:none;color:var(--green);border:1.5px solid var(--green)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
-.stat{background:var(--green2);border-radius:12px;padding:12px 14px}.stat b{display:block;font-family:'Noto Serif TC',serif;font-size:22px;color:var(--green)}.stat span{font-size:12px;color:var(--muted);line-height:1.5}
-.ws{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:14px;display:grid;grid-template-columns:90px 1fr;gap:16px}
+/* path */
+.path{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:26px 0}
+.step{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 20px 18px;text-decoration:none;color:var(--ink);position:relative;transition:transform .15s,box-shadow .15s}
+.step:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(30,50,40,.12)}
+.step .k{display:inline-flex;width:44px;height:44px;border-radius:12px;align-items:center;justify-content:center;font-family:'Noto Serif TC';font-weight:900;font-size:22px;color:#fff;margin-bottom:8px}
+.step b{display:block;font-size:18px}.step span{display:block;font-size:14px;color:var(--muted);line-height:1.65;margin-top:4px}
+.step em{display:block;font-style:normal;font-size:13px;color:var(--accent);font-weight:700;margin-top:10px}
+.step:not(:last-child)::after{content:'→';position:absolute;right:-14px;top:42%;font-size:20px;color:var(--accent);z-index:2}
+.qs{background:var(--green);color:#eef4ef;border-radius:18px;padding:20px 24px;margin:12px 0 26px}
+.qs h3{color:#fff;margin-bottom:6px}.qs ol{margin:0;padding-left:20px}.qs li{margin:2px 0}
+.ask{background:var(--acc2);border-radius:16px;padding:16px 20px;margin:14px 0 22px}
+.ask h4{margin:0 0 6px;font-size:14px;color:#8a5426;letter-spacing:.06em}
+.ask ol{margin:0;padding-left:20px;font-size:14.5px}
+.avoid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.avoid div{border-radius:14px;padding:14px 16px;font-size:14px}
+.avoid .x{background:#f6e3df}.avoid .o{background:var(--green2)}
+.avoid b{display:block;margin-bottom:4px}
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;display:flex;gap:12px;align-items:flex-start;text-align:left;font:inherit;color:inherit;transition:box-shadow .15s,transform .15s;width:100%}
+.card:hover{box-shadow:0 8px 22px rgba(30,50,40,.12);transform:translateY(-1px)}
+.ico{flex:none;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;position:relative}
+.ico svg{width:28px;height:28px;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ico i{position:absolute;right:-6px;bottom:-6px;font-style:normal;font-size:11px;font-weight:700;background:#fff;border:1px solid var(--line);border-radius:6px;padding:0 5px;line-height:18px}
+.a .ico{background:var(--acc2)}.a .ico svg{stroke:#8a5426}
+.b .ico{background:var(--blue2)}.b .ico svg{stroke:var(--blue)}
+.c .ico{background:var(--green2)}.c .ico svg{stroke:var(--green)}
+.card b{display:block;font-size:15.5px;line-height:1.45}
+.card span{font-size:12.8px;color:var(--muted);line-height:1.55;display:block;margin-top:3px}
+.card .more{font-size:12px;color:var(--accent);font-weight:700;margin-top:6px;display:block}
+.group{margin:24px 0 8px;font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--muted)}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(20,28,25,.5);display:none;align-items:flex-start;justify-content:center;z-index:50;overflow-y:auto;padding:40px 16px}
+.modal.show{display:flex}
+.sheet{background:var(--paper);border-radius:20px;max-width:780px;width:100%;padding:28px 30px 26px;position:relative;box-shadow:0 30px 70px rgba(0,0,0,.3)}
+.close{position:absolute;right:16px;top:14px;border:0;background:var(--card);width:38px;height:38px;border-radius:50%;font-size:20px;cursor:pointer;color:var(--muted)}
+.mh{display:flex;gap:14px;align-items:center;margin-bottom:6px}
+.mh .ico{width:58px;height:58px}.mh .ico svg{width:34px;height:34px}
+.mh h2{margin:0;font-size:24px}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-top:12px}
+.sec h4{margin:0 0 4px;font-size:13.5px;letter-spacing:.06em;color:var(--green)}
+.sec.no h4{color:var(--warn)}
+.sec ul,.sec ol{margin:0;padding-left:20px}.sec li{margin:2px 0}.sec p{margin:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.two .sec{margin-top:12px}
+.links{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.lk{font-size:12.5px;padding:4px 10px;border-radius:999px;text-decoration:none;font-weight:500;border:0;cursor:pointer;font-family:inherit}
+.lk.a{background:var(--acc2);color:#8a5426}.lk.b{background:var(--blue2);color:var(--blue)}.lk.c{background:var(--green2);color:var(--green)}
+.case{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--green);border-radius:12px;padding:12px 16px;margin-top:10px}
+.case .ref{font-size:13px;color:var(--muted);line-height:1.6}
+.case p{margin:4px 0 0;font-size:14.5px}
+.case a{font-size:12.5px;font-weight:700}
+.mnav{display:flex;justify-content:space-between;margin-top:18px}
+.mnav button{border:0;background:none;color:var(--muted);cursor:pointer;font:inherit;font-size:14px}
+/* cases page */
+.cbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 20px;margin-bottom:12px;display:grid;grid-template-columns:52px 1fr;gap:14px}
+.cbox .ico{background:var(--green2)}.cbox .ico svg{stroke:var(--green)}
+.cbox .ref{font-size:13.5px;color:var(--muted)}
+.cbox p{margin:4px 0}
+.ws{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:14px;display:grid;grid-template-columns:80px 1fr;gap:16px}
 .ws .no{font-family:'Noto Serif TC',serif;font-size:34px;color:var(--accent);line-height:1}
 .ws dl{display:grid;grid-template-columns:86px 1fr;gap:4px 10px;margin:8px 0 0;font-size:14px}.ws dt{color:var(--muted)}.ws dd{margin:0}
-.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;background:#f3e6d8;color:#8a5426;margin-left:6px;vertical-align:middle}
-.note{font-size:13px;color:var(--muted);line-height:1.8}
-.callout{background:#f3e6d8;border-radius:14px;padding:14px 18px;font-size:14.5px;margin:14px 0}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--acc2);color:#8a5426;margin-left:6px;vertical-align:middle}
 footer{border-top:1px solid var(--line);padding:24px 22px 40px;text-align:center;font-size:13px;color:var(--muted)}
-table.mx{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--card);border-radius:12px;overflow:hidden}
-table.mx th,table.mx td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
-table.mx th{background:var(--green2);font-weight:700}
-@media(max-width:860px){.hero,.detail,.case{grid-template-columns:1fr}.doors{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}h1{font-size:28px}.side .sec{position:static}.bar{flex-wrap:wrap}nav.main{margin-left:0}.ws{grid-template-columns:1fr}}
+@media(max-width:860px){.path,.avoid,.two{grid-template-columns:1fr}.step:not(:last-child)::after{content:'↓';right:50%;top:auto;bottom:-22px}h1{font-size:27px}.bar{flex-wrap:wrap}nav.main{margin-left:0}.ws{grid-template-columns:1fr}.sheet{padding:24px 18px}.modal{padding:16px 8px}}
 </style>
 </head>
 <body>
 <header class="top"><div class="bar">
- <a class="logo" href="#home"><svg width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="16" fill="#2f5d50"/><path d="M9 24l5-9 3 5 3-6 5 10z" fill="#f2c879"/><circle cx="24" cy="10" r="2.2" fill="#fff"/></svg><div><b>林野感測站</b><small>森林遊憩新世代感測技術平台（暫名）</small></div></a>
+ <a class="logo" href="#home"><svg width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="16" fill="#2f5d50"/><path d="M9 24l5-9 3 5 3-6 5 10z" fill="#f2c879"/><circle cx="24" cy="10" r="2.2" fill="#fff"/></svg><div><b>林野感測站</b><small>森林遊憩新世代感測技術學習平台（暫名）</small></div></a>
  <nav class="main" id="nav">
-  <a href="#problems" data-r="problems">依管理問題找</a>
-  <a href="#tech" data-r="tech">技術圖鑑</a>
-  <a href="#cases" data-r="cases">應用實例</a>
+  <a href="#home" data-r="home">學習路徑</a>
+  <a href="#a" data-r="a">A 管理挑戰</a>
+  <a href="#b" data-r="b">B 管理業務</a>
+  <a href="#c" data-r="c">C 新型資料</a>
+  <a href="#cases" data-r="cases">國外案例</a>
   <a href="#workshops" data-r="workshops">工作坊</a>
   <a href="#about" data-r="about">關於</a>
  </nav>
 </div></header>
 <main id="view"></main>
-<footer>林野感測站（暫名）・東海大學 LaViSa Lab 原友蘭 製作<br>內容彙整自「森林步道新世代監測模式建置」相關研究與工作坊成果；技術說明為一般性介紹，實際導入請依場域條件評估。</footer>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<footer>林野感測站（暫名）・東海大學 LaViSa Lab 原友蘭 製作<br>技術說明為一般性介紹，實際導入請依場域的地形、訊號、電力、人力與法規條件評估。</footer>
 
 <script>
-/* ===== icons ===== */
-const I={
- counter:'<path d="M6 4v16M18 4v16"/><path d="M9 12h6M12 9l3 3-3 3"/>',
- telecom:'<path d="M12 20V9"/><path d="M8 6a6 6 0 0 1 8 0M5.5 3.5a10 10 0 0 1 13 0"/><circle cx="12" cy="9" r="1.5"/><path d="M8 20h8"/>',
- social:'<rect x="4" y="6" width="16" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M8 6l1.5-2h5L16 6"/>',
- citizen:'<path d="M4 15c2-4 6-6 10-5l4-3-1 5c0 3-3 6-7 6H6z"/><circle cx="14.5" cy="11" r=".8"/>',
- gpx:'<path d="M5 19c2-6 4 0 7-6s5-2 7-8"/><circle cx="5" cy="19" r="1.6"/><circle cx="19" cy="5" r="1.6"/>',
- image:'<rect x="3" y="7" width="13" height="10" rx="2"/><path d="M16 11l5-3v8l-5-3"/>',
- traffic:'<rect x="5" y="9" width="14" height="7" rx="2"/><path d="M7 9l2-4h6l2 4"/><circle cx="8.5" cy="17.5" r="1.5"/><circle cx="15.5" cy="17.5" r="1.5"/>',
- env:'<path d="M12 3v11"/><circle cx="12" cy="17" r="3"/><path d="M15 6h3M15 9h2"/>',
- qr:'<rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><path d="M14 14h2v2h-2zM18 18h2v2h-2zM14 20h2M20 14v2"/>',
- rescue:'<path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><path d="M12 7v6M9 10h6"/>',
- booking:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4M16 3v4M8 13h3"/>',
- drone:'<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8 8l2.5 2.5M16 8l-2.5 2.5"/><rect x="10" y="10" width="4" height="4" rx="1"/><path d="M12 14v4M10 20h4"/>'
+/* ===================== icons ===================== */
+const SV={
+ /* A categories */
+ behavior:'<circle cx="12" cy="5" r="2"/><path d="M12 7v6l-3 7M12 13l3 7M8 10h8"/>',
+ realtime:'<circle cx="12" cy="13" r="7"/><path d="M12 9v4l3 2M9 3h6"/>',
+ facility:'<path d="M4 20V10l8-6 8 6v10z"/><path d="M10 20v-5h4v5"/>',
+ data:'<ellipse cx="12" cy="6" rx="7" ry="2.5"/><path d="M5 6v12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/>',
+ surge:'<path d="M3 17l5-5 4 3 8-9"/><path d="M15 6h5v5"/>',
+ eco:'<path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"/><path d="M5 19l8-8"/>',
+ other:'<circle cx="12" cy="12" r="8"/><path d="M12 8v8M8 12h8"/>',
+ /* B scenarios */
+ bA:'<path d="M4 18l5-12 4 8 3-4 4 8z"/><circle cx="17" cy="6" r="1.6"/>',
+ bB:'<circle cx="7" cy="8" r="2"/><circle cx="16" cy="7" r="2"/><circle cx="11" cy="16" r="2"/><path d="M8.5 9.5l1.7 4.6M14.6 8.3l-2.6 6"/>',
+ bC:'<rect x="4" y="5" width="16" height="12" rx="2"/><path d="M8 17l-2 3M8 10h8M8 13h5"/>',
+ bD:'<path d="M12 3l2.6 5.5 6 .8-4.4 4.2 1.1 6L12 16.7 6.7 19.5l1.1-6L3.4 9.3l6-.8z"/>',
+ bE:'<path d="M4 20V4M4 20h16"/><path d="M7 15l4-4 3 3 5-6"/>',
+ bF:'<rect x="5" y="4" width="14" height="16" rx="2"/><path d="M10 16V8h3a2.5 2.5 0 0 1 0 5h-3"/>',
+ bG:'<path d="M12 3v18M8 3l-4 18M16 3l4 18"/><path d="M12 7v2M12 12v2"/>',
+ bH:'<path d="M4 6h12v8H8l-4 4z"/><path d="M18 10h2v8l-3-3h-5"/>',
+ bI:'<path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><path d="M12 7v6M9 10h6"/>',
+ bJ:'<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17v.5"/>',
+ bK:'<path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"/><circle cx="10" cy="14" r="1"/>',
+ bL:'<path d="M14 6l4 4-9 9H5v-4z"/><path d="M12 8l4 4"/>',
+ /* C data */
+ cA:'<path d="M6 4v16M18 4v16"/><path d="M9 12h6M12 9l3 3-3 3"/>',
+ cB:'<rect x="3" y="7" width="13" height="10" rx="2"/><path d="M16 11l5-3v8l-5-3"/>',
+ cC:'<rect x="5" y="9" width="14" height="7" rx="2"/><path d="M7 9l2-4h6l2 4"/><circle cx="8.5" cy="17.5" r="1.5"/><circle cx="15.5" cy="17.5" r="1.5"/>',
+ cD:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4M16 3v4M8 13h3"/>',
+ cE:'<path d="M12 20V9"/><path d="M8 6a6 6 0 0 1 8 0M5.5 3.5a10 10 0 0 1 13 0"/><circle cx="12" cy="9" r="1.5"/><path d="M8 20h8"/>',
+ cF:'<path d="M5 19c2-6 4 0 7-6s5-2 7-8"/><circle cx="5" cy="19" r="1.6"/><circle cx="19" cy="5" r="1.6"/>',
+ cG:'<rect x="4" y="6" width="16" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M8 6l1.5-2h5L16 6"/>',
+ cH:'<path d="M4 15c2-4 6-6 10-5l4-3-1 5c0 3-3 6-7 6H6z"/><circle cx="14.5" cy="11" r=".8"/>',
+ cI:'<path d="M12 3v11"/><circle cx="12" cy="17" r="3"/><path d="M15 6h3M15 9h2"/>',
+ cJ:'<path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+ cK:'<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8 8l2.5 2.5M16 8l-2.5 2.5"/><rect x="10" y="10" width="4" height="4" rx="1"/><path d="M12 14v4M10 20h4"/>',
+ cL:'<rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><path d="M14 14h2v2h-2zM18 18h2v2h-2zM14 20h2M20 14v2"/>'
 };
-const ico=(k)=>`<div class="ico"><svg viewBox="0 0 24 24">${I[k]}</svg></div>`;
+const ico=(k,tag)=>`<div class="ico"><svg viewBox="0 0 24 24">${SV[k]}</svg>${tag?`<i>${tag}</i>`:''}</div>`;
 
-/* ===== technologies (12 types from the World Café poster) ===== */
-const T=[
- {id:'gpx',name:'登山 APP 與 GPS／GPX 軌跡',v:8,one:'山友手機或手錶記錄下的行走路線，可回答人走了哪裡、停在哪裡。',
-  can:['熱門路線與路段使用強度','停留點與休息點的位置','偏離正式步道、形成非正式路徑的位置','迷途或折返的熱點','實際行進時間，可用來檢討步道標示的建議時間'],
-  cant:['全體遊客的人數（只代表有記錄的人）','沒有開啟 APP 的遊客行為'],
-  bias:'記錄軌跡的多是較有經驗的山友，輕裝散步型遊客偏少；熱門 APP 的使用者族群也會影響結果。',
-  cost:'可下載公開軌跡或與平台合作取得；需要 GIS 處理能力，把大量軌跡轉成路段使用量。',
-  privacy:'軌跡的起訖點可能指向個人住家，使用時需截斷起訖段，並確認授權或使用者同意。',
-  clue:'工作坊 12 類資料中貼點最多（8 點）。管理者最想知道的是「人進去之後去了哪裡」。',
-  pair:['counter','drone','rescue'],probs:['offtrail','lost','signal']},
- {id:'qr',name:'QR Code 回報與線上參與',v:7,one:'在現場貼上 QR Code，讓遊客或巡查人員隨手回報設施損壞、意見或狀況。',
-  can:['設施損壞、步道劣化的即時回報','遊客意見與滿意度','特定活動或解說的參與紀錄'],
-  cant:['「沒有回報」不代表「沒有問題」','回報者以外的遊客感受'],
-  bias:'願意掃碼的人是特定族群；長者或不熟悉手機的人較少回報；需要網路訊號。',
-  cost:'建置成本低，真正的成本在後端：誰受理、多久處理、如何回覆。',
-  privacy:'若蒐集聯絡方式需告知用途；回報照片可能拍到他人。',
-  clue:'工作坊貼點第二高（7 點）。C 桌提醒：設置回報入口只是起點，必須搭配受理、確認、警示與維修的流程。',
-  pair:['citizen','image'],probs:['facility','feeding']},
- {id:'image',name:'影像與 AI 辨識',v:5,one:'以攝影機搭配影像辨識，自動計算人數、車輛或辨識特定行為。',
-  can:['入口或觀景點的即時人數與擁擠程度','特定行為，例如餵食、犬隻未繫繩、進入封閉區','車流與停車狀況'],
+/* ===================== references (international cases) ===================== */
+const R={
+ cessford:{ref:'Cessford, G., & Muhar, A. (2003). Monitoring options for visitor numbers in national parks and natural areas. <i>Journal for Nature Conservation, 11</i>(4), 240–250.',doi:'10.1078/1617-1381-00055',sum:'系統整理國家公園與自然區域常用的遊客人數監測方法，比較各類自動計數器、人工觀察與調查的適用情境與限制，並強調自動計數必須搭配人工觀察校正，數字才可信。'},
+ noaa:{ref:'Paudyal, R., Ball Gonyo, S., & Clark Fobia, A. (2025). <i>Outdoor recreation study: Counter calibration and visitor assessment report</i>. NOAA National Centers for Coastal Ocean Science.',doi:'10.25923/srr4-r391',sum:'美國國家海洋暨大氣總署在維吉尼亞州約克河沿岸與密西西比州 Grand Bay 研究保護區設置車輛與行人計數器，說明計數器的校正流程，以及如何把原始計數轉換為可用的到訪量資料。'},
+ mitter:{ref:'Mitterwallner, V., Peters, A., Edelhoff, H., et al. (2023). Automated visitor and wildlife monitoring with camera traps and machine learning. <i>Remote Sensing in Ecology and Conservation</i>.',doi:'10.1002/rse2.367',sum:'以開源物件偵測模型 MegaDetector 處理三個地區、超過 30 萬張自動相機影像，辨識人、動物與車輛的準確率皆超過九成，並與人工判讀的長期時間序列高度一致，顯示可在符合隱私規範下長期監測遊客與野生動物活動。'},
+ lupp:{ref:'Lupp, G., Kantelberg, V., Förster, B., et al. (2021). Visitor counting and monitoring in forests using camera traps: A case study from Bavaria (Southern Germany). <i>Land, 10</i>(7), 736.',doi:'10.3390/land10070736',sum:'在德國巴伐利亞的森林以原本用於野生動物的自動相機監測遊客，除了人數也能記錄活動類型；但人工判讀影像耗費大量人力，研究因此建立照片張數與通過人數的換算係數。'},
+ jenkins:{ref:'Jenkins, J. S., Marshall, A. M., Shiflett, S. A., et al. (2025). Snow droughts, deluge, and reservation systems interact to drive recreation access at Yosemite National Park. <i>Scientific Reports</i>.',doi:'10.1038/s41598-025-21022-5',sum:'以優勝美地國家公園各入口的交通計數與預約制度資料，分析極端積雪與日間預約制度如何共同影響到訪量與壅塞；沒有預約制度的年份，道路封閉使遊客集中、交通壅塞加劇。'},
+ miller:{ref:'Miller, Z. D., Tendick, A., Meyer, C., et al. (2023). Comparing visitor perceptions, characteristics, and support for management actions before and during a pilot timed entry system at Arches National Park. <i>Sustainability, 15</i>(13), 10035.',doi:'10.3390/su151310035',sum:'拱門國家公園試辦分時入園預約制度，比較試辦前後的遊客調查：步道上的體驗品質提升，遊客組成沒有明顯改變，遊客也更早規劃行程、對分時入園的支持度提高。'},
+ ahas:{ref:'Ahas, R., Aasa, A., Roose, A., Mark, Ü., & Silm, S. (2008). Evaluating passive mobile positioning data for tourism surveys: An Estonian case study. <i>Tourism Management, 29</i>(3), 469–486.',doi:'10.1016/j.tourman.2007.05.014',sum:'以愛沙尼亞為例，評估電信業者被動記錄的手機定位資料能否用於觀光統計，並與住宿統計等傳統資料比較，討論其涵蓋範圍、代表性與隱私等優勢和限制。'},
+ korpilo:{ref:'Korpilo, S., Virtanen, T., & Lehvävirta, S. (2017). Smartphone GPS tracking—Inexpensive and efficient data collection on recreational movement. <i>Landscape and Urban Planning, 157</i>, 608–617.',doi:'10.1016/j.landurbplan.2016.08.005',sum:'以智慧型手機 GPS 軌跡記錄芬蘭都市森林中遊憩者的移動，說明這種方式能以低成本取得路線、使用強度與離開正式步道的空間資訊，可作為步道管理的依據。'},
+ norman:{ref:'Norman, P., & Pickering, C. M. (2017). Using volunteered geographic information to assess park visitation: Comparing three on-line platforms. <i>Applied Geography, 89</i>, 163–172.',doi:'10.1016/j.apgeog.2017.11.001',sum:'比較三種線上平台的志願地理資訊用於評估公園使用的效果，指出不同平台代表不同的使用者與活動，需要依管理問題選擇或搭配使用。'},
+ wood:{ref:'Wood, S. A., Guerry, A. D., Silver, J. M., & Lacayo, M. (2013). Using social media to quantify nature-based tourism and recreation. <i>Scientific Reports, 3</i>, 2976.',doi:'10.1038/srep02976',sum:'以 Flickr 照片計算「照片使用者日數」（PUD），在全球數百處自然遊憩地點與官方到訪統計比對，發現兩者具相關性，奠定以社群照片估算遊憩使用的方法。'},
+ sessions:{ref:'Sessions, C., Wood, S. A., Rabotyagov, S., & Fisher, D. M. (2016). Measuring recreational visitation at U.S. National Parks with crowd-sourced photographs. <i>Journal of Environmental Management, 183</i>, 703–711.',doi:'10.1016/j.jenvman.2016.09.018',sum:'以群眾上傳的照片估算美國國家公園的到訪量，並與國家公園管理署的官方統計比較，評估社群資料作為到訪量替代指標的可行性與限制。'},
+ tenkanen:{ref:'Tenkanen, H., Di Minin, E., Heikinheimo, V., Hausmann, A., Herbst, M., Kajala, L., & Toivonen, T. (2017). Instagram, Flickr, or Twitter: Assessing the usability of social media data for visitor monitoring in protected areas. <i>Scientific Reports, 7</i>, 17615.',doi:'10.1038/s41598-017-18007-4',sum:'比較芬蘭與南非保護區中 Instagram、Flickr、Twitter 三種社群資料與官方遊客統計的對應程度，發現不同平台、不同保護區的表現差異很大，使用前必須先驗證。'},
+ cheung:{ref:'Cheung, S. Y., Leung, Y.-F., & Larson, L. R. (2022). Citizen science as a tool for enhancing recreation research in protected areas: Applications and opportunities. <i>Journal of Environmental Management, 305</i>, 114353.',doi:'10.1016/j.jenvman.2021.114353',sum:'回顧公民科學在保護區遊憩研究中的應用，例如遊客拍照監測環境變化、志工監測珊瑚礁，說明它在補足傳統監測、擴大資料覆蓋上的潛力，以及資料品質的挑戰。'},
+ sullivan:{ref:'Sullivan, B. L., Aycrigg, J. L., Barry, J. H., et al. (2014). The eBird enterprise: An integrated approach to development and application of citizen science. <i>Biological Conservation, 169</i>, 31–40.',doi:'10.1016/j.biocon.2013.11.003',sum:'說明 eBird 如何設計資料蒐集流程、品質審核與開放共享，讓全球賞鳥者的紀錄可以用於物種分布與保育研究。'},
+ olive:{ref:'Olive, N. D., & Marion, J. L. (2009). The influence of use-related, environmental, and managerial factors on soil loss from recreational trails. <i>Journal of Environmental Management, 90</i>(3), 1483–1493.',doi:'10.1016/j.jenvman.2008.10.004',sum:'調查遊憩步道的土壤流失，分析使用類型、地形坡度、步道走向與管理措施等因子的影響，說明環境條件與使用強度如何共同決定步道劣化。'},
+ heggie:{ref:'Heggie, T. W., & Amundson, M. E. (2009). Dead men walking: Search and rescue in US National Parks. <i>Wilderness & Environmental Medicine, 20</i>(3), 244–249.',doi:'10.1580/08-WEME-OR-299R.1',sum:'整理美國國家公園的搜救事件紀錄，分析事件類型、參與的遊憩活動與發生特性，作為預防宣導與救援資源配置的依據。'},
+ sikorsky:{ref:'Sikorsky, K., Sharp, R. L., Wilkes, J., et al. (2023). The use of drones for recreational impact monitoring of public lands. <i>Journal of Park and Recreation Administration</i>.',doi:'10.18666/JPRA-2022-11429',sum:'在美國堪薩斯州新開放的州立公園，以無人機空拍監測管理單位選定的兩項指標：遊客自行踩出的路徑與植被流失。開放五個月內即觀察到局部植被流失與新路徑形成。'},
+ bruno:{ref:'Bruno, N., Valletta, A., Segalini, A., et al. (2024). Low-cost techniques for soil erosion monitoring on mountain trails. <i>The International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences</i>.',doi:'10.5194/isprs-archives-XLVIII-2-W8-2024-53-2024',sum:'在義大利與中歐六處保護區，依範圍與精度需求比較地面雷射掃描、近景攝影測量、球面攝影與無人機攝影測量監測山區步道沖蝕的成本與效果，並提出實務建議。'},
+ brown:{ref:'Brown, G., & Weber, D. (2011). Public Participation GIS: A new method for national park planning. <i>Landscape and Urban Planning, 102</i>(1), 1–15.',doi:'10.1016/j.landurbplan.2011.03.003',sum:'在澳洲國家公園以公眾參與式 GIS（PPGIS）讓遊客在地圖上標記地方價值、體驗與環境衝擊，說明這些空間化的意見如何支援國家公園規劃。'}
+};
+
+/* ===================== C: 12 types of new data ===================== */
+const C={
+ A:{n:'自動人流計數器',s:'特定出入口的通行數量與時間',
+  can:['某個斷面每小時、每日的進出人次','假日與連假尖峰','上下山差額，推估仍在山上的人數','封閉期間仍有人通過的證據'],
+  cant:['人進去後走到哪裡、停多久','結伴並行時可能少算'],
+  bias:'安裝位置決定一切；需要定期以人工計數校正。',cost:'設備、電池或電力、資料回傳；山區無訊號時需人工下載。',privacy:'不辨識個人，風險低。',
+  pair:['F','C','E'],cases:['cessford','noaa']},
+ B:{n:'影像與 AI 辨識',s:'從影像辨識人數、活動或交通狀況',
+  can:['入口或觀景點的人數與擁擠程度','活動類型（步行、騎車、帶狗）','特定行為，例如餵食、進入封閉區','車流與停車狀況'],
   cant:['鏡頭範圍以外的區域','夜間、霧天或遮蔽時的準確度'],
-  bias:'鏡頭位置與角度決定能看到什麼；不同場景需要重新設定或訓練辨識模型。',
-  cost:'設備、電力、網路與後端運算都需要；工作坊提到，鏡頭位置不同會增加辨識設定與影像處理的工作量。',
-  privacy:'會拍到人臉與車牌，需要明確告示、遮蔽處理與保存期限規範。',
-  clue:'工作坊貼點 5 點。最高痛點「餵食野生動物」目前沒有對應工具，影像是少數可能直接看見行為的方法。',
-  pair:['counter','traffic'],probs:['feeding','closure','crowd']},
- {id:'traffic',name:'停車與交通感測',v:5,one:'以地磁、車牌辨識或既有交通攝影機，掌握停車場與聯外道路的車流。',
+  bias:'鏡頭位置與角度決定能看到什麼；不同場景可能需要重新設定或訓練模型。',cost:'設備、電力、網路與運算；人工判讀影像非常耗時，是導入 AI 的主要原因。',privacy:'會拍到人臉與車牌，需要明確告示、遮蔽處理與保存期限規範。',
+  pair:['A','C','L'],cases:['mitter','lupp']},
+ C:{n:'停車與交通感測',s:'車輛進出、剩餘車位與道路壅塞',
   can:['停車場使用率與到離時間','聯外道路的壅塞前兆','尖峰時段預測，提早引導或管制'],
   cant:['步行遊客的實際人數（每車人數不固定）'],
-  bias:'機車、遊覽車與接駁車的處理方式會影響結果。',
-  cost:'可先盤點公路單位、地方政府既有的交通感測資源，再評估是否需要自建；工作坊建議把觀測範圍延伸到入園前的道路。',
-  privacy:'車牌辨識屬個人資料，需限定用途與保存期限。',
-  clue:'工作坊貼點 5 點；「設施／停車使用率預測」也是 15 位與會者中 8 位想要的情境。',
-  pair:['counter','telecom','booking'],probs:['crowd','leave']},
- {id:'telecom',name:'電信或行動裝置群聚資料',v:4,one:'由手機與基地台的連線紀錄推估各區域的人口與流動，政府已有開放的彙總資料。',
-  can:['鄉鎮或方格尺度的假日訪客規模','日間與夜間、平日與假日的差異','跨年度比較，作為區域基線'],
-  cant:['人走進了哪一條步道','基地台稀疏的山區，細部空間精度有限'],
-  bias:'受基地台涵蓋範圍、業者用戶組成，以及未持手機者如何推估等因素影響；以行政區面積計算密度會嚴重稀釋山區（可變面積單元問題）。',
-  cost:'內政部提供鄉鎮尺度的月資料，可免費取得；更細的時間與空間尺度需向業者購買，購買前應先確定要回答的問題與範圍。',
-  privacy:'開放資料已匿名彙總，個資風險低。',
-  clue:'工作坊貼點 4 點。本平台的應用實例「電信信令看臺中假日遊客」即示範如何把鄉鎮資料分派到 500 公尺方格。',
-  pair:['counter','social'],probs:['crowd','signal']},
- {id:'social',name:'社群媒體定位、照片與文字',v:3,one:'遊客公開分享的打卡、照片與評論，是遊憩活動留下的數位足跡。',
-  can:['熱門景點與拍照點','遊客關注什麼、對目的地的想像（意象）','爆量前兆，例如楓紅或花季的社群熱度'],
+  bias:'機車、遊覽車與接駁車的處理方式會影響結果；每車人數需要另外調查換算。',cost:'可先盤點公路單位、地方政府既有的交通感測資源，再評估是否自建。',privacy:'車牌辨識屬個人資料，需限定用途與保存期限。',
+  pair:['A','E','D'],cases:['noaa','jenkins']},
+ D:{n:'預約、售票與入園紀錄',s:'預定到訪人數、時段及部分遊客特性',
+  can:['入園總量與時段分布','遊客來源地與團體組成','作為總量管制與分時入園的工具'],
+  cant:['免門票、免登記步道沒有這類資料','入園後的行為'],
+  bias:'紙本登記容易缺漏與毀損；預約制度本身也會改變誰能進入。',cost:'多半已有，成本在數位化與整合。',privacy:'含個人資料，需依規範保存與去識別化。',
+  pair:['A','C'],cases:['miller','jenkins']},
+ E:{n:'電信或行動裝置群聚資料',s:'特定區域與時段的人群分布及移動',
+  can:['區域或方格尺度的訪客規模','日夜、平假日的差異','跨年度比較，建立區域基線'],
+  cant:['人走進了哪一條步道','基地台稀疏的山區，細部精度有限'],
+  bias:'受基地台涵蓋、業者用戶組成、未持手機者的推估方式影響；以行政區面積計算密度會稀釋山區。',cost:'政府開放的彙總資料可免費取得；更細的時空尺度需向業者購買。',privacy:'開放資料已匿名彙總，個資風險低。',
+  pair:['A','G','C'],cases:['ahas']},
+ F:{n:'登山 APP 與 GPS／GPX 軌跡',s:'使用路線、移動範圍、停留與偏離步道',
+  can:['熱門路線與路段使用強度','停留點與休息點','偏離正式步道、形成非正式路徑的位置','迷途或折返的熱點'],
+  cant:['全體遊客的人數','沒有開啟 APP 的遊客行為'],
+  bias:'記錄軌跡的多是較有經驗的山友；不同 APP 的使用者族群不同。',cost:'可下載公開軌跡或與平台合作；需要 GIS 處理能力。',privacy:'軌跡起訖點可能指向個人住家，需截斷起訖段並確認授權。',
+  pair:['A','K','J'],cases:['korpilo','norman']},
+ G:{n:'社群媒體定位、照片與文字',s:'熱門地點、遊客活動與目的地意象',
+  can:['熱門景點與拍照點','遊客關注什麼、如何描述這個地方','爆量前兆'],
   cant:['實際遊客人數','不分享的遊客行為'],
-  bias:'願意打卡與上傳的人本身就是特定樣本，少數高頻使用者可能貢獻大量紀錄；在人數少的山區，資料常常過於稀疏。',
-  cost:'需要技術取得與整理；平台政策變動可能讓資料來源中斷。',
-  privacy:'即使是公開資料，使用時也應去識別化，不呈現個別使用者。',
-  clue:'工作坊貼點 3 點；A 桌案例指出，社群分享曾讓大坑步道與稍來山楓紅人潮暴增。',
-  pair:['counter','citizen'],probs:['crowd']},
- {id:'env',name:'氣象與環境感測器',v:3,one:'雨量、溫濕度、風速與土壤含水等感測器，協助判斷步道與遊客的環境風險。',
-  can:['降雨與步道封閉、開放的決策依據','步道沖蝕與崩塌的風險時段','遊客準備不足（天候變化）的預警資訊'],
-  cant:['遊客實際的行為反應'],
-  bias:'山區測站少，地形差異大，單一測站難以代表整條步道。',
-  cost:'設備與維護、電力與資料回傳；可先整合氣象署與既有測站。',
-  privacy:'不涉個人資料。',
-  clue:'工作坊貼點 3 點；與會者提到山區測站稀少，影響現場判斷。',
-  pair:['rescue','drone'],probs:['weather','closure']},
- {id:'rescue',name:'救援、報案與事件位置',v:3,one:'把事故、報案與救援的發生地點整理成圖，找出高風險路段。',
-  can:['事故熱點與高風險路段','岔路、迷途與失聯的好發位置','推估山區無訊號區域'],
-  cant:['沒有通報的事件與差點發生的狀況'],
-  bias:'只記錄已發生且有通報的事件，件數少時不宜過度解讀。',
-  cost:'需要跨單位（消防、警政、管理單位）整合紀錄格式。',
-  privacy:'個案資料敏感，對外只呈現彙總結果。',
-  clue:'工作坊貼點 3 點；「山區無訊號」有 7 位與會者標記，搜救時待救者擅自下切失聯即是一例。',
-  pair:['gpx','env'],probs:['signal','lost']},
- {id:'counter',name:'自動人流計數器',v:2,one:'裝在登山口或步道上的感測器，記錄通過的人次與方向。',
-  can:['某個斷面每小時、每日的進出人次','假日與連假尖峰','上下山差額，推估仍在山上的人數（颱風、日落前清山）','封閉期間仍有人通過的證據'],
-  cant:['人進去後走到哪裡、停多久','結伴並行時可能少算'],
-  bias:'安裝位置決定一切；需要定期以人工計數校正。',
-  cost:'設備、電池或電力、資料回傳；山區無訊號時需人工下載。',
-  privacy:'不辨識個人，風險低。',
-  clue:'工作坊貼點只有 2 點，但「無法掌握遊客實際離開時間」有 7 位與會者標記，正好是雙向計數器能回答的問題；免門票園區目前多靠人工計數。',
-  pair:['gpx','telecom','traffic'],probs:['leave','closure','crowd']},
- {id:'booking',name:'預約、售票與入園紀錄',v:1,one:'門票、預約與登記資料，是許多園區已經擁有、卻未被充分運用的資料。',
-  can:['入園總量與時段分布','遊客來源地與團體組成'],
-  cant:['免門票步道沒有這類資料','入園後的行為'],
-  bias:'紙本登記容易缺漏、毀損，數位化程度影響可用性。',
-  cost:'多半已有，成本在數位化與整合。',
-  privacy:'含個人資料，需依規範保存與去識別化。',
-  clue:'工作坊貼點 1 點；「紙本登記毀損」「計數與巡查資料難整合」兩張挑戰卡零票，資料整合尚未被第一線視為問題。',
-  pair:['counter','traffic'],probs:['leave']},
- {id:'citizen',name:'公民科學平台資料',v:1,one:'eBird、iNaturalist、iTrail、路殺社等平台上，由志工與遊客共同累積的觀察紀錄。',
-  can:['物種分布與重要棲地','步道劣化的現場回報（iTrail）','賞鳥者等特定遊客的活動範圍'],
+  bias:'願意分享的人是特定樣本；少數高頻使用者可能貢獻大量紀錄；人少的山區資料常常過於稀疏。',cost:'需要技術取得與整理；平台政策變動可能讓資料中斷。',privacy:'即使是公開資料，也應去識別化。',
+  pair:['A','E','H'],cases:['wood','sessions','tenkanen']},
+ H:{n:'公民科學平台資料',s:'物種觀察、環境與遊客活動的空間關係',
+  can:['物種分布與重要棲地','步道劣化的現場回報','賞鳥者等特定遊客的活動範圍'],
   cant:['一般遊客的數量'],
-  bias:'紀錄集中在交通便利、熱門的地點；觀察者投入的時間不均。',
-  cost:'多數為開放資料；iTrail 原始資料目前需申請。',
-  privacy:'敏感物種的座標需要模糊化處理。',
-  clue:'工作坊貼點 1 點；A 桌案例包含賞鳥者播放鳥音誘鳥，顯示公民科學資料也能反映遊客行為。',
-  pair:['social','qr','image'],probs:['feeding','facility']},
- {id:'drone',name:'無人機、航空影像與遙測',v:1,one:'以空拍或衛星影像，大範圍盤點步道寬度、裸露、崩塌與非正式路徑。',
+  bias:'紀錄集中在交通便利、熱門的地點；觀察者投入的時間不均。',cost:'多數為開放資料。',privacy:'敏感物種的座標需要模糊化處理。',
+  pair:['G','L','B'],cases:['cheung','sullivan']},
+ I:{n:'氣象與環境感測器',s:'雨量、溫度、土壤、空氣及環境變化',
+  can:['降雨與步道封閉、開放的決策依據','步道沖蝕與崩塌的風險時段','天候預警資訊'],
+  cant:['遊客實際的行為反應'],
+  bias:'山區測站少、地形差異大，單一測站難以代表整條步道。',cost:'設備與維護、電力與資料回傳；可先整合既有測站。',privacy:'不涉個人資料。',
+  pair:['J','K'],cases:['olive']},
+ J:{n:'救援、報案與事件位置資料',s:'迷途、受傷、災害及高風險位置',
+  can:['事故熱點與高風險路段','迷途與失聯的好發位置','推估山區無訊號區域'],
+  cant:['沒有通報的事件與險些發生的狀況'],
+  bias:'只記錄已發生且有通報的事件，件數少時不宜過度解讀。',cost:'需要跨單位整合紀錄格式。',privacy:'個案資料敏感，對外只呈現彙總結果。',
+  pair:['F','I'],cases:['heggie']},
+ K:{n:'無人機、航空影像與遙測',s:'大範圍環境變化、設施及非正式路徑',
   can:['步道拓寬、裸露與複線化的範圍','崩塌與災後路況','非正式路徑的大範圍盤點'],
   cant:['人的行為與數量','濃密林冠下的地面狀況'],
-  bias:'林冠遮蔽影響判讀；不同時期影像的解析度需一致才能比較。',
-  cost:'飛行許可與空域規範、操作人員、影像處理。',
-  privacy:'避免拍攝可識別的個人與私人土地。',
-  clue:'工作坊貼點 1 點；可與軌跡資料搭配，確認非正式路徑的位置與範圍。',
-  pair:['gpx','env'],probs:['offtrail']}
-];
-const TB=Object.fromEntries(T.map(t=>[t.id,t]));
+  bias:'林冠遮蔽影響判讀；不同時期影像的解析度需一致才能比較。',cost:'飛行許可與空域規範、操作人員、影像處理。',privacy:'避免拍攝可識別的個人與私人土地。',
+  pair:['F','I'],cases:['sikorsky','bruno']},
+ L:{n:'QR Code 回報與線上參與',s:'遊客、居民或巡查人員回報現場情況',
+  can:['設施損壞、步道劣化的即時回報','遊客意見與滿意度','在地圖上標記價值與問題位置'],
+  cant:['「沒有回報」不代表「沒有問題」'],
+  bias:'願意掃碼或參與的人是特定族群；需要網路訊號。',cost:'建置成本低，真正的成本在後端：誰受理、多久處理、如何回覆。',privacy:'若蒐集聯絡方式需告知用途；回報照片可能拍到他人。',
+  pair:['H','B'],cases:['brown']}
+};
 
-/* ===== management problems (Poster A, votes / 15) ===== */
-const P=[
- {id:'feeding',name:'垃圾或餵食使野生動物接近',n:11,desc:'八仙山步道曾有遊客餵食藍鵲與藍腹鷴，也有人在山頂烹煮食物、播放鳥音誘鳥。禁餵宣導已有，行為仍難改變。',tech:['image','citizen','qr'],gap:'全場最高的痛點，但 12 類資料中沒有成熟的對應工具。'},
- {id:'closure',name:'遊客無視封閉或勸退公告',n:9,desc:'步道封閉、颱風或災修期間仍有人進入。與會者普遍認為問題不在缺少警訊，而在遊客是否遵從。',tech:['counter','image','env'],gap:'「預警系統」情境 0 人選擇；新型數據的角色應是監測遵從行為，而非再做一套預警。'},
- {id:'offtrail',name:'遊客離開步道形成非正式路徑',n:9,desc:'屋東縱走、八唐縱走，以及越野跑者在馬崙山踩出的多條路徑。',tech:['gpx','drone','citizen']},
- {id:'signal',name:'山區無訊號，無法即時聯絡',n:7,desc:'搜救時待救者擅自下切而失聯；訊號弱區的位置目前並不清楚。',tech:['rescue','gpx','telecom']},
- {id:'leave',name:'無法掌握遊客實際離開時間',n:7,desc:'颱風警報時不知道還有多少人留在園區或山上。',tech:['counter','traffic','booking']},
- {id:'lost',name:'遊客錯過標誌、地圖或岔路',n:6,desc:'岔路標示不清造成迷途，例如鳶嘴西稜、屋我尾山岔路。',tech:['gpx','rescue']},
- {id:'crowd',name:'社群爆量、入口壅塞與停車不足',n:4,desc:'社群分享讓楓紅季人潮暴增；連假收費站排隊、車位不足，園區無法即時掌握人數與停車量。',tech:['traffic','counter','telecom','social']},
- {id:'weather',name:'遊客未做好天候與地形準備',n:5,desc:'未帶雨具、頭燈與飲水而求救。',tech:['env','rescue']},
- {id:'facility',name:'設施破壞與假日垃圾超過人力',n:4,desc:'假日垃圾桶爆滿、公廁清潔頻率不足、設施損壞無人回報。',tech:['qr','citizen']}
-];
+/* ===================== B: 12 management scenarios ===================== */
+const B={
+ A:{n:'行程規劃與資訊推薦',s:'路線、時間、難度與適宜活動',dec:'要提供遊客哪些路線資訊與建議？',ex:'步道資訊、官網、告示牌、遊客中心諮詢',gap:'不知道遊客實際怎麼走、花多少時間；資訊是否被閱讀也不清楚',scale:'路段尺度；季節性更新',c:['F','G']},
+ B:{n:'遊客空間分布與流動監測',s:'熱點、停留、移動與分散情形',dec:'哪裡需要分流、巡查人力該放在哪裡？',ex:'定點人工計數、巡查紀錄',gap:'只有「點」的資料，沒有路線與面的分布',scale:'路段尺度；每日或每週',c:['F','E','A','G']},
+ C:{n:'目的地意象與活動認知',s:'遊客如何描述場域與活動',dec:'解說與宣導訊息要強調什麼？',ex:'遊客問卷、訪談',gap:'樣本小、更新慢；遊客的期待與實際環境落差難掌握',scale:'全區；每年',c:['G','L']},
+ D:{n:'遊客滿意度與服務品質',s:'設施、服務、安全及體驗回饋',dec:'哪些設施或服務需要優先改善？',ex:'紙本與 QR Code 問卷、口頭反映',gap:'回應數少；少數具體的不滿意意見容易被平均值掩蓋',scale:'設施尺度；每季',c:['L','G']},
+ E:{n:'訪客量與尖峰預測',s:'日、週、季節及特殊事件需求',dec:'人力、清潔、接駁要怎麼排？如何證明遊客量以爭取資源？',ex:'門票、人工計數、登記簿',gap:'免門票區沒有資料；無法事前預測尖峰',scale:'全區；每日',c:['A','E','D','G']},
+ F:{n:'設施與停車使用管理',s:'停車、廁所、接駁及容量使用',dec:'何時啟動停車疏導或接駁？',ex:'假日人工巡查、入口計數',gap:'人員到場才知道已滿位',scale:'停車場與入口道路；約 15 分鐘更新',c:['C','A','B']},
+ G:{n:'交通監測與入口管制',s:'道路、入口、壅塞及疏導',dec:'是否需要交通管制或提前引導？',ex:'現場人員、交通單位通報',gap:'看不到入園前外圍道路的壅塞前兆',scale:'聯外道路；即時',c:['C','E']},
+ H:{n:'公眾參與與意見蒐集',s:'居民、遊客及利害關係人意見',dec:'規劃與管理措施如何回應各方意見？',ex:'說明會、陳情信箱、1999 轉辦',gap:'意見難以定位到具體地點，也難追蹤處理結果',scale:'場域尺度；依議題',c:['L','G']},
+ I:{n:'緊急救援與安全管理',s:'定位、行程、事件及人力調度',dec:'救援資源放在哪裡、高風險路段如何預防？',ex:'報案紀錄、紙本入山登記',gap:'事前不知道遊客的路線與位置；登記資料不完整',scale:'路段與事件；即時與年度回顧',c:['J','F','D']},
+ J:{n:'天候、災害與擁擠預警',s:'風險訊息、門檻及通知時機',dec:'何時封閉、何時發布警訊、通知給誰？',ex:'氣象預報、現場告示',gap:'山區測站少；已在步道內的遊客收不到通知',scale:'步道尺度；小時',c:['I','E','L']},
+ K:{n:'自然資源與環境監測',s:'物種、棲地、遊憩使用及環境變化',dec:'哪些區域需要保護、限制或復育？',ex:'定期樣區調查、巡查照片',gap:'無法掌握遊客尖峰時的即時變化',scale:'棲地與路段；季節',c:['H','K','B']},
+ L:{n:'維護、巡查與資源配置',s:'步道、設施、垃圾及人力安排',dec:'哪裡最需要優先維修、人力怎麼排？',ex:'巡查排班、維修紀錄',gap:'不知道哪裡劣化最快、哪裡最需要優先處理',scale:'路段與設施；每月',c:['L','K','A']}
+};
 
-/* ===== views ===== */
-const V=document.getElementById('view');
-const tcard=t=>`<a class="tcard" href="#tech-${t.id}">${ico(t.id)}<div><b>${t.name}</b><span>${t.one}</span><em class="votes">工作坊貼點 ${t.v}</em></div></a>`;
+/* ===================== A: 25 management challenges ===================== */
+const AC={behavior:'遊客行為',realtime:'即時掌握現場',facility:'設施、維護與使用者',data:'資料與證據',surge:'社群與突發人潮',eco:'生態衝擊',other:'其他'};
+const A={
+ A:{n:'社群媒體造成步道突然爆量',cat:'surge',d:'打卡熱點、花季或楓紅在社群擴散，短時間湧入超出步道與設施承載的人潮。',blind:'爆量多半發生後才知道，缺少提前偵測的訊號。',b:['E','G','F'],c:['G','E','A']},
+ B:{n:'遊客無視封閉或勸退公告',cat:'behavior',d:'步道封閉、颱風或災修期間，仍有遊客進入。',blind:'不知道封閉期間實際有多少人進入、從哪裡進入。',b:['J','I','L'],c:['A','B','F']},
+ C:{n:'山區無訊號，無法即時聯絡',cat:'realtime',d:'訊號死角讓遊客求救與管理單位通知都很困難。',blind:'訊號弱區的位置並不清楚。',b:['I','J'],c:['J','F','E']},
+ D:{n:'偏遠設施遭破壞或竊取',cat:'facility',d:'偏遠的解說牌、感測設備或廁所等設施遭破壞、竊取。',blind:'巡查頻率低，發現時間往往落後。',b:['L'],c:['L','B']},
+ E:{n:'無法掌握遊客實際離開時間',cat:'realtime',d:'颱風警報或日落前，不知道還有多少人在園區或山上。',blind:'只知道進入，不知道離開。',b:['I','B'],c:['A','C','D']},
+ F:{n:'違規停車阻礙居民或救援',cat:'facility',d:'假日登山口路邊停車，阻礙居民通行與救援車輛。',blind:'人員到場前不知道停車狀況。',b:['F','G'],c:['C','B']},
+ G:{n:'垃圾或餵食使野生動物接近',cat:'eco',d:'餵食、留下食物或垃圾，使野生動物改變習性、主動接近人群。',blind:'行為零散，難以被持續記錄；目前少有直接對應的監測工具。',b:['K','L'],c:['B','H','L']},
+ H:{n:'過度使用影響敏感生態區',cat:'eco',d:'使用量超過敏感棲地的承受力，造成踐踏與干擾。',blind:'缺少使用量與生態指標同步的資料。',b:['K','B'],c:['H','A','K']},
+ I:{n:'遊客未做好天候地形準備',cat:'behavior',d:'未帶雨具、頭燈與飲水，或低估路程與天候變化。',blind:'不知道遊客出發前取得了哪些資訊。',b:['A','J','I'],c:['I','F','G']},
+ J:{n:'團體業者未準確通報人數',cat:'realtime',d:'團體與業者帶團的實際人數與通報不符。',blind:'缺少可以核對的實際人數。',b:['E','I'],c:['D','A']},
+ K:{n:'無法即時掌握人數或停車量',cat:'realtime',d:'園區無法即時知道現場人數與停車量。',blind:'到場才知道已經滿了。',b:['F','G','E'],c:['A','C','B']},
+ L:{n:'假日垃圾超過維護人力負荷',cat:'facility',d:'假日垃圾量與清潔需求超過現有人力。',blind:'不知道垃圾量和人流之間的對應關係。',b:['L','F'],c:['A','L']},
+ M:{n:'卡上沒有的重要管理問題',cat:'other',d:'這一格留給你：寫下你的場域最重要、卻沒有出現在其他 24 張卡上的問題。',blind:'先描述何時、何地、發生什麼，再回到 B、C 兩站尋找對應的業務與資料。',b:[],c:[]},
+ N:{n:'遊客錯過標誌、地圖或岔路',cat:'behavior',d:'岔路標示不清或遊客沒有注意，造成迷途。',blind:'不知道遊客在哪些岔路走錯。',b:['A','I'],c:['F','J']},
+ O:{n:'無法即時傳達天候災害警訊',cat:'realtime',d:'午後雷雨或豪雨時，無法通知已在步道內的遊客。',blind:'不知道誰在步道內、在哪裡。',b:['J','I'],c:['I','E','L']},
+ P:{n:'不同活動或使用者發生衝突',cat:'facility',d:'越野跑、團體活動與一般遊客互相干擾，或公共空間被長時間占用。',blind:'不知道不同使用者在何時、何地重疊。',b:['B','D'],c:['F','B','G']},
+ Q:{n:'紙本登記毀損、模糊或被忽略',cat:'data',d:'入山登記簿受潮、字跡模糊，或遊客根本不填。',blind:'登記資料不完整，無法用於救援與統計。',b:['I','E'],c:['D','L']},
+ R:{n:'可靠人流資料耗費大量人力',cat:'data',d:'人工計數需要大量人力，正確率又難以保證。',blind:'難以長期持續，也無法涵蓋所有入口。',b:['E','B'],c:['A','B','E']},
+ S:{n:'入口道路或接駁發生壅塞',cat:'realtime',d:'連假時入口道路回堵、接駁排隊。',blind:'到場前看不到壅塞的前兆。',b:['G','F'],c:['C','E']},
+ T:{n:'遊客離開步道形成非正式路徑',cat:'behavior',d:'抄捷徑、縱走或越野活動踩出多條路徑，造成沖蝕與棲地破碎。',blind:'定點巡查看不到完整的路線。',b:['K','B','L'],c:['F','K']},
+ U:{n:'資料分散於不同機關或系統',cat:'data',d:'人流、救援、交通與環境資料分屬不同單位與系統。',blind:'無法放在一起判讀。',b:['I','L'],c:['D','J','A']},
+ V:{n:'難以證明遊客量爭取維護資源',cat:'data',d:'缺少可信的遊客量證據，向上級爭取預算與人力時說服力不足。',blind:'現有數字難以被外部採信。',b:['E','L'],c:['A','E','G']},
+ W:{n:'犬隻未繫繩干擾野生動物',cat:'behavior',d:'犬隻追逐或驚擾野生動物與其他遊客。',blind:'行為發生時沒有紀錄。',b:['K'],c:['B','L']},
+ X:{n:'計數、巡查與平台資料難整合',cat:'data',d:'計數器、巡查紀錄與線上平台的格式與時間尺度都不一樣。',blind:'無法交叉比對與驗證。',b:['L','B'],c:['A','L','H']},
+ Y:{n:'多語資訊不足造成規則誤解',cat:'behavior',d:'外籍遊客看不懂規則與警示而誤觸規定。',blind:'不知道哪些族群誤解了規則。',b:['A','C'],c:['G','L']}
+};
+const ASK={
+ a:['現在發生哪些森林遊憩管理挑戰？最近一次是在何時、何地？','這是偶發事件，還是反覆發生？','目前由誰、用什麼方式發現？是持續監測，還是事件發生後才知道？','不同季節、時段或場域是否不同？','哪些問題少見，但安全或生態後果嚴重？'],
+ b:['這項業務需要做什麼管理決策？','目前使用哪些傳統調查、巡查、計數或行政資料？','資料由誰蒐集、多久整理一次？','資料在時間、空間或對象上，哪裡不足？','需要細到什麼尺度、多久更新一次才有管理價值？'],
+ c:['這項資料可能提供什麼？還不能回答什麼？','它能補足全部的缺口，還是只有一部分？','需要和哪些傳統資料（巡查、計數、訪談）一起判讀？','資料代表的是哪些人？漏掉了誰？','下一步要怎麼小規模測試？']
+};
+
+/* ===================== rendering ===================== */
+const V=document.getElementById('view'),MOD=document.getElementById('modal'),SH=document.getElementById('sheet');
+const aCard=k=>`<button class="card a" data-m="a-${k}">${ico(A[k].cat,k)}<div><b>${A[k].n}</b><span>${A[k].d}</span><em class="more">點開看說明 →</em></div></button>`;
+const bCard=k=>`<button class="card b" data-m="b-${k}">${ico('b'+k,'B-'+k)}<div><b>${B[k].n}</b><span>${B[k].s}</span><em class="more">點開看說明 →</em></div></button>`;
+const cCard=k=>`<button class="card c" data-m="c-${k}">${ico('c'+k,'C-'+k)}<div><b>${C[k].n}</b><span>${C[k].s}</span><em class="more">點開看說明與案例 →</em></div></button>`;
+const askBox=(k,t)=>`<div class="ask"><h4>${t}</h4><ol>${ASK[k].map(q=>`<li>${q}</li>`).join('')}</ol></div>`;
+const lk=(t,k)=>`<button class="lk ${t}" data-m="${t}-${k}">${t==='a'?k+' '+A[k].n:t==='b'?'B-'+k+' '+B[k].n:'C-'+k+' '+C[k].n}</button>`;
+const caseBox=id=>{const r=R[id];return `<div class="case"><div class="ref">${r.ref}</div><p>${r.sum}</p><a href="https://doi.org/${r.doi}" target="_blank" rel="noopener">閱讀原文（DOI）↗</a></div>`;};
+
 const views={
-home:()=>`<section class="hero"><div>
- <div class="eyebrow">FOR FOREST RECREATION MANAGERS</div>
- <h1>不是要更多資料，<br>是要回答得了的問題。</h1>
- <p class="lead">人流計數器、電信信令、登山軌跡、社群照片、公民科學……新興感測技術越來越多。這個平台從第一線管理問題出發，說明每一種技術能回答什麼、回答不了什麼，並以谷關七雄等實例示範如何使用。</p>
- <a class="btn" href="#problems">從我的管理問題開始 →</a> <a class="btn ghost" href="#tech">瀏覽技術圖鑑</a>
- </div><div class="box"><h3>選資料之前，先問四件事</h3><ol>
- <li>我要解決的管理問題是什麼？</li><li>需要知道的是總量、位置、時間，還是行為？</li><li>這份資料代表的是誰？漏掉的是誰？</li><li>資料進來之後，誰受理、誰行動、怎麼看成效？</li></ol></div></section>
- <div class="doors">
-  <a class="door" href="#problems"><b>依管理問題找</b><span>從餵食、無視封閉、非正式路徑等現場問題，找可用的資料。</span></a>
-  <a class="door" href="#tech"><b>技術圖鑑</b><span>12 類新型資料的能力、限制、成本與隱私。</span></a>
-  <a class="door" href="#cases"><b>應用實例</b><span>谷關七雄山徑脈動、電信信令看臺中假日遊客。</span></a>
-  <a class="door" href="#workshops"><b>技術推廣工作坊</b><span>以管理問題為題，邀請專家與第一線一起動手。</span></a>
+home:()=>`<div class="eyebrow">LEARNING PATH FOR FOREST RECREATION MANAGERS</div>
+ <h1>從問題出發，再選資料。</h1>
+ <p class="lead">新型感測資料越來越多，但資料本身不會回答問題。這套學習路徑分成三站：先辨認現場的管理挑戰，再檢視這些挑戰落在哪些管理業務、現有資料缺了什麼，最後才認識可能補足缺口的新型資料，並以國外研究與報告說明實際用法。</p>
+ <div class="path">
+  <a class="step" href="#a"><span class="k" style="background:var(--accent)">A</span><b>管理挑戰與監測盲區</b><span>現在發生哪些問題？目前怎麼發現？還有什麼看不到？</span><em>25 個管理挑戰 →</em></a>
+  <a class="step" href="#b"><span class="k" style="background:var(--blue)">B</span><b>管理業務與資料缺口</b><span>這些問題對應哪項業務？現在用什麼資料？哪裡不夠？</span><em>12 項管理業務 →</em></a>
+  <a class="step" href="#c"><span class="k" style="background:var(--green)">C</span><b>新型資料與管理應用</b><span>哪些新型資料可能補足？能與不能？要搭配什麼？</span><em>12 類新型資料 →</em></a>
  </div>
- <h2>12 類新型資料</h2><p class="note">依 2026 年 9 月世界咖啡館工作坊 C 桌的貼點多寡排序；貼點不限票數，反映的是關注方向，不是技術優劣或採購順位。</p>
- <div class="grid">${T.map(tcard).join('')}</div>`,
+ <div class="qs"><h3>走完三站，你應該能寫出這一句話</h3>
+  <p style="margin:0">「為了解決 <b>（A 管理挑戰）</b>，我們在 <b>（B 管理業務）</b> 上缺少 <b>（時間／空間／對象）</b> 的資料；可以試用 <b>（C 新型資料）</b>，並搭配 <b>（傳統資料）</b> 一起判讀，先在 <b>（某路段或時段）</b> 小規模測試。」</p></div>
+ <h2>三個好問題，三個要避免的問法</h2>
+ <div class="avoid"><div class="x"><b>✕ 避免這樣問</b>「我們需要大數據嗎？」<br>「哪一個平台最好？」<br>「新型資料可以取代傳統調查嗎？」</div>
+ <div class="o"><b>○ 改成這樣問</b>「哪項管理決策需要什麼資料？」<br>「需要細到哪裡、多久更新？」<br>「這項資料可能提供什麼？還需要什麼資料一起判讀？」</div></div>
+ <h2>先試一個例子</h2>
+ <div class="grid">${['T','K','G'].map(aCard).join('')}</div>`,
 
-problems:()=>`<div class="eyebrow">START FROM YOUR PROBLEM</div><h1>依管理問題找資料</h1>
- <p class="lead">以下是 2026 年 9 月工作坊中，林業及自然保育署臺中分署、國家公園署等 7 個機關 15 位第一線人員最常標記的管理挑戰。每一項列出可以考慮的資料類型。</p>
- <div class="callout">對應關係是初步建議，會在後續工作坊中由第一線人員修正。數字為標記該項的人數／15。</div>
- ${P.sort((a,b)=>b.n-a.n).map(p=>`<div class="prob"><div class="head"><h3>${p.name}</h3><span class="n">${p.n}／15 位標記</span></div>
-  <div class="meter"><i style="width:${p.n/15*100}%"></i></div><p>${p.desc}</p>
-  ${p.gap?`<p style="color:var(--warn)"><b>缺口：</b>${p.gap}</p>`:''}
-  <div class="chips">${p.tech.map(k=>`<a class="chip" href="#tech-${k}">${TB[k].name} →</a>`).join('')}</div></div>`).join('')}`,
+a:()=>`<div class="eyebrow">STATION A</div><h1>A｜管理挑戰與監測盲區</h1>
+ <p class="lead">先不急著找科技解決方案。從這 25 個常見的森林遊憩管理挑戰中，找出你的單位曾經遇過、正在處理或特別有感的項目，點開看看它的監測盲區，以及可以往哪些業務與資料延伸。</p>
+ ${askBox('a','面對每一張卡，先問自己')}
+ ${Object.keys(AC).map(cat=>{const ks=Object.keys(A).filter(k=>A[k].cat===cat);return ks.length?`<div class="group">${AC[cat]}</div><div class="grid">${ks.map(aCard).join('')}</div>`:'';}).join('')}`,
 
-tech:()=>`<div class="eyebrow">TECHNOLOGY GUIDE</div><h1>技術圖鑑</h1>
- <p class="lead">每一類資料都用同一組問題說明：能回答什麼、回答不了什麼、代表性與偏差、成本與維運、隱私與權責。點卡片看完整說明。</p>
- <div class="grid">${T.map(tcard).join('')}</div>`,
+b:()=>`<div class="eyebrow">STATION B</div><h1>B｜管理業務與資料缺口</h1>
+ <p class="lead">把 A 站的問題放回日常業務：這項業務要做什麼決策？目前靠哪些調查、巡查、計數或行政紀錄？資料缺的是時間、位置、對象，還是更新頻率？</p>
+ ${askBox('b','檢視每一項業務時')}
+ <div class="avoid"><div class="x"><b>✕ 模糊的需求</b>「我們缺大數據」「資料越即時越好」「希望建立整合平台」</div><div class="o"><b>○ 具體的需求</b>「啟動停車疏導」需要「進出量與剩餘車位」，範圍是停車場及入口道路，約 15 分鐘更新一次。</div></div>
+ <div class="grid">${Object.keys(B).map(bCard).join('')}</div>`,
 
-techDetail:id=>{const t=TB[id];if(!t)return views.tech();const probs=P.filter(p=>p.tech.includes(id));
- return `<a class="back" href="#tech">← 技術圖鑑</a><div style="display:flex;gap:14px;align-items:center">${ico(t.id)}<div><div class="eyebrow">TECHNOLOGY</div><h1 style="margin:0">${t.name}</h1></div></div>
- <p class="lead">${t.one}</p>
- <div class="detail"><div>
-  <div class="sec"><h4>能回答的問題</h4><ul>${t.can.map(x=>`<li>${x}</li>`).join('')}</ul></div>
-  <div class="sec no"><h4>回答不了的事</h4><ul>${t.cant.map(x=>`<li>${x}</li>`).join('')}</ul></div>
-  <div class="sec"><h4>代表性與偏差</h4><p style="margin:0">${t.bias}</p></div>
-  <div class="sec"><h4>成本與維運</h4><p style="margin:0">${t.cost}</p></div>
-  <div class="sec"><h4>隱私與權責</h4><p style="margin:0">${t.privacy}</p></div>
- </div><aside class="side"><div class="sec"><h4>第一線的線索</h4><p style="margin:0;font-size:14px">${t.clue}</p>
-  <dl><dt>常見搭配</dt><dd><div class="chips">${t.pair.map(k=>`<a class="chip" href="#tech-${k}">${TB[k].name}</a>`).join('')}</div></dd>
-  <dt>可對應的管理問題</dt><dd><div class="chips">${probs.length?probs.map(p=>`<a class="chip alt" href="#problems">${p.name}</a>`).join(''):'—'}</div></dd></dl></div></aside></div>`;},
+c:()=>`<div class="eyebrow">STATION C</div><h1>C｜新型資料與管理應用</h1>
+ <p class="lead">這 12 類資料只說明「可能提供什麼」，不代表一定準確、可以取得，或能直接取代傳統調查。每張卡都附上國外研究或報告作為案例。</p>
+ ${askBox('c','認識每一類資料時')}
+ <div class="grid">${Object.keys(C).map(cCard).join('')}</div>`,
 
-cases:()=>`<div class="eyebrow">CASES</div><h1>應用實例</h1><p class="lead">把技術放回真實場域：每個實例都說明用了哪些資料、回答了什麼問題，以及還有哪些限制。</p>
- <div class="case"><div><div class="eyebrow">實例一・谷關七雄</div><h2 style="margin-top:6px">山徑脈動 Forest Trace</h2>
-  <p>以谷關七雄為示範場域，把森林步道新世代監測模式拆成十個站點：從人流計數、數位足跡、資料驗證，到遊憩衝擊、管理需求與資料治理，沿著一條步道回答「監測如何變成決策」。</p>
-  <div class="chips"><a class="chip" href="#tech-counter">自動人流計數器</a><a class="chip" href="#tech-telecom">電信信令</a><a class="chip" href="#tech-social">社群媒體</a><a class="chip" href="#tech-citizen">公民科學</a></div>
-  <a class="btn" href="../forest-trace/">進入立體故事地圖 →</a></div>
-  <div style="background:#2f5d50;border-radius:14px;padding:26px;color:#eef4ef"><b style="font-family:'Noto Serif TC';font-size:22px">十個站點，六個問題</b><p style="font-size:14px;margin:8px 0 0">人來了多少 → 人在哪裡 → 數位足跡能不能代表他們 → 哪裡產生遊憩壓力 → 管理者需要什麼 → 監測結果如何變成決策</p></div></div>
- <div class="case"><div><div class="eyebrow">實例二・電信信令</div><h2 style="margin-top:6px">電信信令看臺中假日遊客</h2>
-  <p>以內政部 112 年 11 月行政區電信信令人口統計，將假日日間活動人數減去平日夜間居民，得到「超額」的假日訪客，再以國土利用調查的建築用地，把鄉鎮資料分派到 500 公尺方格。</p>
-  <div class="stats"><div class="stat"><b>6,402</b><span>和平區假日超額訪客</span></div><div class="stat"><b>49.8%</b><span>相對平日居民</span></div><div class="stat"><b>約 2,900</b><span>假日夜間淨流入，全市最高</span></div><div class="stat"><b>6.35</b><span>以鄉鎮面積計算的密度（人／km²）</span></div></div>
-  <p class="note">管理上的意義：以鄉鎮面積計算，和平區的遊客被一千多平方公里的山地稀釋；改以建築用地分派後，才看得出遊客集中在臺 8 線與谷關一帶的聚落。電信資料適合回答區域規模，無法回答人走進哪一條步道。</p>
-  <a class="chip" href="#tech-telecom">技術卡：電信或行動裝置群聚資料 →</a></div>
-  <figure style="margin:0"><img src="img/fig3_day.jpg" alt="臺中市假日日間遊客密度 500 公尺方格圖" loading="lazy"><figcaption class="note">臺中市假日日間遊客密度（500 m 方格，112 年 11 月）。資料來源：內政部電信信令人口統計資料、國土利用調查（2023）；分區密度推估依 Burian et al. (2022)。</figcaption></figure></div>
- <div class="case"><div><div class="eyebrow">實例三・需求盤點</div><h2 style="margin-top:6px">世界咖啡館：管理者怎麼看新型資料</h2>
-  <p>2026 年 9 月 21 日，7 個機關 15 位第一線人員以世界咖啡館形式分三桌討論，在兩張海報上貼出 161 張貼紙。最清楚的訊號是：痛點在人的行為，不在資料。管理挑戰的 95 票中，46% 落在遊客行為，27% 落在即時掌握現場。</p>
-  <a class="btn ghost" href="#problems">看管理問題與對應資料 →</a></div>
-  <table class="mx"><tr><th>四個訊號</th></tr><tr><td>最大的痛點（餵食）沒有對應的工具</td></tr><tr><td>問題不在警訊，在遊客是否遵從</td></tr><tr><td>想要的工具不全是從痛點長出來的</td></tr><tr><td>資料整合幾乎沒有人當成問題</td></tr></table></div>`,
+cases:()=>`<div class="eyebrow">INTERNATIONAL CASES</div><h1>國外案例</h1>
+ <p class="lead">以下研究與報告示範各類新型資料在國家公園、保護區與森林遊憩場域的實際用法，以及它們發現的限制。點資料類型可以回到技術說明。</p>
+ ${Object.keys(C).map(k=>C[k].cases.map(id=>`<div class="cbox">${ico('c'+k)}<div><button class="lk c" data-m="c-${k}">C-${k} ${C[k].n}</button><p>${R[id].sum}</p><div class="ref">${R[id].ref} <a href="https://doi.org/${R[id].doi}" target="_blank" rel="noopener">DOI ↗</a></div></div></div>`).join('')).join('')}`,
 
 workshops:()=>`<div class="eyebrow">WORKSHOPS</div><h1>技術推廣工作坊</h1>
- <p class="lead">每一場以一個第一線管理問題為題，邀請技術專家與管理單位共同主持：先講清楚技術能與不能，再用真實資料動手做，最後討論導入後誰受理、誰行動。會後的簡報、資料與紀錄回填到本平台。</p>
- <div class="callout">以下為規劃中的場次，日期、講者與地點待定。</div>
+ <p class="lead">每一場從一個 A 站的管理挑戰出發，沿著 A→B→C 的順序進行：先說清楚問題與業務缺口，再由專家介紹技術的能與不能，接著以國外案例與實際資料動手做，最後討論導入後誰受理、誰行動、怎麼看成效。</p>
+ <div class="ask"><h4>以下為規劃中的場次</h4><p style="margin:0;font-size:14.5px">日期、講者與地點待定。</p></div>
  ${[
-  ['01','餵食熱點要用什麼資料抓？','工作坊中最多人標記、卻沒有對應工具的問題。','影像與 AI 辨識、公民科學平台、QR Code 回報','影像辨識或保育研究專家 ＋ 步道管理單位','比較三種資料能看見與看不見的行為；設計一處試辦監測點'],
-  ['02','遵從行為：封閉公告為什麼沒人理？','問題不在警訊，而在遊客是否遵從。','自動人流計數器、影像辨識、氣象感測','遊憩行為研究學者 ＋ 工作站同仁','用計數器資料找出封閉期間的進入紀錄，討論可行的介入'],
-  ['03','登山軌跡入門：人進去之後走了哪裡？','管理者最想要的資料類型。','登山 APP 與 GPX 軌跡、無人機遙測','GIS 與空間分析專家','把公開軌跡轉成路段使用量，辨識非正式路徑與迷途熱點'],
-  ['04','電信信令入門：區域遊客有多少？','開放資料可以免費取得，但需要正確解讀。','電信或行動裝置群聚資料','空間統計與人口推估專家','從屬性表欄位解讀到方格分派，理解可變面積單元問題']
- ].map(([n,t,why,tech,who,doit])=>`<div class="ws"><div class="no">${n}</div><div><h3>${t}<span class="tag">規劃中</span></h3><p style="margin:4px 0;color:var(--muted);font-size:14.5px">${why}</p>
-  <dl><dt>相關技術</dt><dd>${tech}</dd><dt>講者組合</dt><dd>${who}</dd><dt>實作內容</dt><dd>${doit}</dd><dt>對象</dt><dd>森林遊樂區、國家公園、風景區與步道管理第一線人員</dd></dl></div></div>`).join('')}`,
+  ['01','餵食與野生動物接近：要用什麼資料看見行為？',['G','W'],['K','L'],['B','H','L'],'影像辨識或保育研究專家 ＋ 步道管理單位','以國外自動相機與 AI 辨識研究為例，比較三類資料能看見與看不見的行為，設計一處試辦監測點'],
+  ['02','封閉公告為什麼沒人理？監測遵從行為',['B','O'],['J','I'],['A','B','I'],'遊憩行為研究學者 ＋ 工作站同仁','用計數器資料辨識封閉期間的進入紀錄，討論可行的介入與宣導'],
+  ['03','人進去之後走了哪裡？登山軌跡與非正式路徑',['T','N'],['B','L'],['F','K'],'GIS 與空間分析專家','把公開軌跡轉成路段使用量，搭配空拍影像辨識非正式路徑與迷途熱點'],
+  ['04','有多少人來？從計數器、交通到電信資料',['K','R','V'],['E','F'],['A','C','E'],'空間統計與人口推估專家','比較不同尺度的人流資料，練習把區域資料與入口計數放在一起判讀']
+ ].map(([n,t,a,b,c,who,doit])=>`<div class="ws"><div class="no">${n}</div><div><h3>${t}<span class="tag">規劃中</span></h3>
+  <dl><dt>A 管理挑戰</dt><dd><div class="links">${a.map(k=>lk('a',k)).join('')}</div></dd><dt>B 管理業務</dt><dd><div class="links">${b.map(k=>lk('b',k)).join('')}</div></dd><dt>C 新型資料</dt><dd><div class="links">${c.map(k=>lk('c',k)).join('')}</div></dd><dt>講者組合</dt><dd>${who}</dd><dt>實作內容</dt><dd>${doit}</dd><dt>對象</dt><dd>森林遊樂區、國家公園、風景區與步道管理第一線人員</dd></dl></div></div>`).join('')}`,
 
 about:()=>`<div class="eyebrow">ABOUT</div><h1>關於這個平台</h1>
- <p class="lead">林野感測站（暫名）整理森林遊憩管理可用的新世代感測技術，從第一線管理問題出發，說明各類資料的能力與限制，並以真實場域的應用實例與技術推廣工作坊，協助管理單位判斷「什麼問題用什麼資料」。</p>
- <h2>內容來源</h2>
- <p>技術圖鑑的分類與第一線線索，來自 2026 年 9 月 21 日辦理的「森林遊憩新視野：新型數據與經營管理需求」世界咖啡館工作坊之海報貼點統計與各桌總結；電信信令實例使用內政部 109 年與 112 年 11 月行政區電信信令人口統計資料及國土利用調查（2023）；谷關七雄實例來自「森林步道新世代監測模式建置」之研究架構。</p>
+ <p class="lead">林野感測站（暫名）是給森林遊憩第一線管理人員的教育訓練平台。內容依「管理挑戰 → 管理業務與資料缺口 → 新型資料」三個層次安排，協助管理人員在導入新型資料之前，先釐清要解決的問題、需要的資料尺度，以及資料的代表性與限制。</p>
+ <h2>內容架構</h2>
+ <p>A、B、C 三站的題目與提問，改寫自「森林遊憩新視野：新型數據與經營管理需求」世界咖啡館工作坊的三桌討論設計；需求的層次參考 Yuan 與 Ho（2017）的需求分析架構，由已知需求、已知未知需求，逐步走向資料治理層次的未知需求。各類資料的案例取自國外期刊論文與機構報告，每一篇都附有 DOI 連結。</p>
+ <h2>延伸閱讀</h2>
+ <p><a href="../forest-trace/">山徑脈動 Forest Trace</a>：以谷關七雄為示範場域的森林步道監測模式故事地圖。</p>
  <h2>使用說明</h2>
- <p class="note">本平台的技術說明為一般性介紹，實際導入前請依場域的地形、訊號、電力、人力與法規條件評估。管理問題與資料類型的對應為初步建議，將透過工作坊持續修正。</p>
- <h2>參考文獻</h2>
- <p class="note">Burian, J., Zapletal, J., & Pászto, V. (2022). Disaggregator – a tool for the aggregation and disaggregation of spatial data. <i>Earth Science Informatics, 15</i>, 1323–1339.<br>
- Goodchild, M. F. (2007). Citizens as sensors: The world of volunteered geography. <i>GeoJournal, 69</i>(4), 211–221.<br>
- Tenkanen, H., Di Minin, E., Heikinheimo, V., Hausmann, A., Herbst, M., Kajala, L., & Toivonen, T. (2017). Instagram, Flickr, or Twitter: Assessing the usability of social media data for visitor monitoring in protected areas. <i>Scientific Reports, 7</i>, 17615.<br>
- Walden-Schreiner, C., Leung, Y.-F., & Tateosian, L. (2018). Digital footprints: Incorporating crowdsourced geographic information for protected area management. <i>Applied Geography, 90</i>, 44–54.<br>
- Wood, S. A., Guerry, A. D., Silver, J. M., & Lacayo, M. (2013). Using social media to quantify nature-based tourism and recreation. <i>Scientific Reports, 3</i>, 2976.</p>`
+ <p class="note">各張卡片之間的對應關係為教學用的初步建議，實際導入前請依場域的地形、訊號、電力、人力與法規條件評估，並透過工作坊持續修正。</p>`
 };
-function route(){const h=(location.hash||'#home').slice(1);let html,r=h;
- if(h.startsWith('tech-')){html=views.techDetail(h.slice(5));r='tech';}else html=(views[h]||views.home)();
- V.innerHTML=html;document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.r===r));window.scrollTo(0,0);}
+
+/* ---- modal content ---- */
+function modalHTML(t,k){
+ if(t==='a'){const x=A[k];if(!x)return '';const keys=Object.keys(A),i=keys.indexOf(k);
+  return `<div class="mh a">${ico(x.cat,k)}<div><div class="eyebrow">A｜${AC[x.cat]}</div><h2>${x.n}</h2></div></div>
+  <div class="sec"><h4>情境</h4><p>${x.d}</p></div>
+  <div class="sec no"><h4>監測盲區：現行方式還看不到什麼？</h4><p>${x.blind}</p></div>
+  ${askBox('a','追問這個挑戰')}
+  ${x.b.length?`<div class="sec"><h4>下一站 B：可能對應的管理業務</h4><div class="links">${x.b.map(b=>lk('b',b)).join('')}</div></div>`:''}
+  ${x.c.length?`<div class="sec"><h4>再下一站 C：可能有幫助的新型資料</h4><div class="links">${x.c.map(c=>lk('c',c)).join('')}</div></div>`:''}
+  <div class="mnav"><button data-m="a-${keys[(i+keys.length-1)%keys.length]}">‹ 上一張</button><button data-m="a-${keys[(i+1)%keys.length]}">下一張 ›</button></div>`;}
+ if(t==='b'){const x=B[k];if(!x)return '';const keys=Object.keys(B),i=keys.indexOf(k);const as=Object.keys(A).filter(a=>A[a].b.includes(k));
+  return `<div class="mh b">${ico('b'+k,'B-'+k)}<div><div class="eyebrow">B｜管理業務</div><h2>${x.n}</h2></div></div>
+  <p class="note" style="margin:4px 0 0">${x.s}</p>
+  <div class="two"><div class="sec"><h4>要做的決策</h4><p>${x.dec}</p></div><div class="sec"><h4>常用的既有資料</h4><p>${x.ex}</p></div></div>
+  <div class="sec no"><h4>常見的資料缺口</h4><p>${x.gap}</p></div>
+  <div class="sec"><h4>需要的尺度與更新頻率（示例）</h4><p>${x.scale}</p></div>
+  ${askBox('b','追問這項業務')}
+  <div class="sec"><h4>從哪些 A 管理挑戰而來</h4><div class="links">${as.map(a=>lk('a',a)).join('')||'—'}</div></div>
+  <div class="sec"><h4>下一站 C：可能補足缺口的新型資料</h4><div class="links">${x.c.map(c=>lk('c',c)).join('')}</div></div>
+  <div class="mnav"><button data-m="b-${keys[(i+keys.length-1)%keys.length]}">‹ 上一項</button><button data-m="b-${keys[(i+1)%keys.length]}">下一項 ›</button></div>`;}
+ if(t==='c'){const x=C[k];if(!x)return '';const keys=Object.keys(C),i=keys.indexOf(k);const bs=Object.keys(B).filter(b=>B[b].c.includes(k));const as=Object.keys(A).filter(a=>A[a].c.includes(k));
+  return `<div class="mh c">${ico('c'+k,'C-'+k)}<div><div class="eyebrow">C｜新型資料</div><h2>${x.n}</h2></div></div>
+  <p class="note" style="margin:4px 0 0">${x.s}</p>
+  <div class="two"><div class="sec"><h4>可能回答的問題</h4><ul>${x.can.map(v=>`<li>${v}</li>`).join('')}</ul></div><div class="sec no"><h4>回答不了的事</h4><ul>${x.cant.map(v=>`<li>${v}</li>`).join('')}</ul></div></div>
+  <div class="sec"><h4>代表性與偏差</h4><p>${x.bias}</p></div>
+  <div class="two"><div class="sec"><h4>成本與維運</h4><p>${x.cost}</p></div><div class="sec"><h4>隱私與權責</h4><p>${x.privacy}</p></div></div>
+  <div class="sec"><h4>國外案例</h4>${x.cases.map(caseBox).join('')}</div>
+  <div class="sec"><h4>常見搭配</h4><div class="links">${x.pair.map(c=>lk('c',c)).join('')}</div></div>
+  <div class="sec"><h4>可支援的 B 管理業務</h4><div class="links">${bs.map(b=>lk('b',b)).join('')||'—'}</div></div>
+  <div class="sec"><h4>相關的 A 管理挑戰</h4><div class="links">${as.map(a=>lk('a',a)).join('')||'—'}</div></div>
+  <div class="mnav"><button data-m="c-${keys[(i+keys.length-1)%keys.length]}">‹ 上一類</button><button data-m="c-${keys[(i+1)%keys.length]}">下一類 ›</button></div>`;}
+ return '';
+}
+function openModal(id){const [t,k]=id.split('-');const h=modalHTML(t,k);if(!h)return;SH.innerHTML=`<button class="close" aria-label="關閉">×</button>`+h;MOD.classList.add('show');MOD.scrollTop=0;document.body.style.overflow='hidden';}
+function closeModal(){MOD.classList.remove('show');document.body.style.overflow='';}
+document.addEventListener('click',e=>{const m=e.target.closest('[data-m]');if(m){e.preventDefault();openModal(m.dataset.m);return;}
+ if(e.target.closest('.close')||e.target===MOD)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+function route(){const h=(location.hash||'#home').slice(1);closeModal();V.innerHTML=(views[h]||views.home)();
+ document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.r===(views[h]?h:'home')));window.scrollTo(0,0);}
 addEventListener('hashchange',route);route();
 </script>
 </body>
