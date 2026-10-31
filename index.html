@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>景觀故事群島</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f6f1e6;--paper2:#efe8d9;--ink:#2a2924;--muted:#6f6a5e;--green:#3f5e4c;--rust:#a8673a;--line:#e2dacb}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:'Noto Sans TC',system-ui,sans-serif;color:var(--ink);background:#1d2a30;overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+#app{display:flex;height:100vh;height:100dvh}
+#stage{position:relative;flex:1;min-width:0;overflow:hidden;background:#cfe0dc}
+#c{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+#labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.lab{position:absolute;left:0;top:0;pointer-events:auto;display:flex;align-items:center;gap:7px;background:#fffdf8;border-radius:999px;padding:5px 12px 5px 9px;font-weight:700;font-size:13.5px;white-space:nowrap;box-shadow:0 2px 10px rgba(30,40,35,.18);cursor:pointer;transition:background .2s,color .2s,opacity .25s;will-change:transform}
+.lab .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.lab .ok{font-size:11px;color:var(--green);margin-left:-2px}
+.lab.sel{background:var(--green);color:#fff}
+.lab.sel .ok{color:#cfe6d4}
+.lab.hub{background:var(--rust);color:#fff}
+.hide-labels .lab{opacity:0;pointer-events:none}
+.brand{position:absolute;top:20px;left:20px;background:rgba(246,241,230,.96);border-radius:18px;padding:16px 22px 16px 20px;display:flex;gap:18px;align-items:center;box-shadow:0 6px 24px rgba(20,30,30,.16)}
+.brand .big{font-family:'Noto Serif TC',serif;font-weight:900;font-size:38px;line-height:1.04;color:var(--rust);letter-spacing:.02em}
+.brand .big i{font-style:normal;font-size:30px}
+.brand .sub{font-weight:700;font-size:16px;letter-spacing:.22em;line-height:1.7}
+.brand .en{font-size:10.5px;letter-spacing:.24em;color:var(--muted);margin-top:6px;font-weight:500}
+.topctl{position:absolute;top:20px;right:20px;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.seg{display:flex;background:rgba(246,241,230,.96);border-radius:999px;padding:4px;box-shadow:0 4px 16px rgba(20,30,30,.14)}
+.seg button{border:0;background:none;border-radius:999px;padding:8px 16px;font-weight:500;font-size:14px;cursor:pointer}
+.seg button.on{background:var(--green);color:#fff}
+.pill{border:0;background:rgba(246,241,230,.96);border-radius:999px;padding:9px 16px;font-weight:500;font-size:14px;cursor:pointer;box-shadow:0 4px 16px rgba(20,30,30,.14);transition:background .2s,color .2s}
+.pill.on{background:var(--green);color:#fff}
+.pill.round{width:40px;padding:9px 0;text-align:center}
+.bl{position:absolute;left:22px;bottom:20px;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.35);max-width:420px}
+.start{border:0;background:var(--green);color:#fff;border-radius:999px;padding:13px 24px;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 6px 20px rgba(20,40,30,.3);text-shadow:none}
+.start.on{background:var(--rust)}
+.bl .ey{font-size:12px;letter-spacing:.3em;margin-top:22px;font-weight:500}
+.bl h3{margin:6px 0 4px;font-size:22px;font-weight:700}
+.bl .meta{font-size:13px;opacity:.95}
+.bl .hint{font-size:12.5px;margin-top:14px;opacity:.9}
+.br{position:absolute;right:20px;bottom:20px;display:flex;gap:8px}
+.legend{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);display:none;gap:8px;background:rgba(246,241,230,.96);padding:8px 12px;border-radius:999px;box-shadow:0 4px 16px rgba(20,30,30,.14);font-size:13px;font-weight:500;white-space:nowrap}
+.legend.show{display:flex}
+.legend span{display:flex;align-items:center;gap:6px;padding:0 4px}
+.legend b{width:18px;height:4px;border-radius:2px;display:inline-block}
+#map{position:absolute;inset:0;padding:150px 24px 24px;background:var(--paper2);opacity:0;pointer-events:none;transition:opacity .45s}
+#map.show{opacity:1;pointer-events:auto}
+#map svg{width:100%;height:100%;display:block}
+.mpt{cursor:pointer}
+.mpt text{font-family:'Noto Sans TC',sans-serif}
+.mpt:hover circle.c,.mpt.sel circle.c{stroke:#2a2924;stroke-width:2.5}
+#panel{width:400px;flex:none;background:var(--paper);overflow-y:auto;border-left:1px solid var(--line);position:relative}
+.pin{padding:40px 34px 30px}
+.eyebrow{font-size:11.5px;letter-spacing:.24em;color:var(--rust);font-weight:700}
+#panel h1{font-family:'Noto Serif TC',serif;font-weight:900;font-size:33px;margin:12px 0 18px;line-height:1.3}
+.prog{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px}
+.dots{display:flex;gap:5px}
+.dots i{width:9px;height:9px;border-radius:50%;background:#ddd5c4;display:block}
+.dots i.on{background:var(--green)}
+.intro{font-size:14.5px;line-height:1.9;color:#4c483f;margin:18px 0 8px}
+.intro b{color:var(--ink);font-weight:700}
+.list{list-style:none;margin:16px 0 0;padding:0}
+.list li{display:grid;grid-template-columns:54px 1fr 18px;align-items:center;gap:6px;padding:15px 2px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .15s}
+.list li:hover{background:rgba(63,94,76,.06)}
+.num{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:30px;color:var(--rust);line-height:1}
+.list .t{font-size:15px;font-weight:500;line-height:1.45}
+.list .p{font-size:12px;color:var(--muted);margin-top:2px}
+.list .ar{color:var(--muted);font-size:14px}
+.list li.v .t::after{content:" ✓";color:var(--green);font-size:12px}
+.foot{margin-top:24px;font-size:12.5px;color:var(--muted);line-height:1.9}
+.foot a{color:var(--green);font-weight:500}
+.back{border:0;background:none;padding:0;color:var(--muted);font-size:13px;cursor:pointer;margin-bottom:26px}
+.back:hover{color:var(--ink)}
+.dnum{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:64px;line-height:.9}
+.place{font-size:13px;color:var(--muted);margin-top:10px;letter-spacing:.05em}
+.dt{font-family:'Noto Serif TC',serif;font-weight:900;font-size:27px;line-height:1.4;margin:8px 0 14px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;font-weight:500;padding:3px 10px;border-radius:999px;color:#fff}
+.blurb{font-size:15px;line-height:1.95;color:#3d3a33;margin:20px 0 26px}
+.cta{display:inline-block;background:var(--green);color:#fff;text-decoration:none;font-weight:700;font-size:14.5px;padding:12px 20px;border-radius:999px}
+.cta:hover{background:#34503f}
+.pn{display:flex;justify-content:space-between;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pn button{border:0;background:none;cursor:pointer;font-size:13.5px;color:var(--muted);padding:4px 0;text-align:left;max-width:48%}
+.pn button:last-child{text-align:right}
+.pn button:hover{color:var(--ink)}
+.pn small{display:block;font-size:11px;letter-spacing:.15em;margin-bottom:3px}
+.note{font-size:12px;color:var(--muted);margin-top:22px;line-height:1.8}
+.modal{position:absolute;inset:0;background:rgba(20,28,30,.45);display:none;align-items:center;justify-content:center;z-index:5}
+.modal.show{display:flex}
+.modal .card{background:var(--paper);border-radius:18px;padding:28px 30px;max-width:420px;width:calc(100% - 40px);line-height:1.9;font-size:14.5px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.modal h4{font-family:'Noto Serif TC',serif;font-size:20px;margin:0 0 10px}
+.modal ul{padding-left:20px;margin:0 0 16px}
+.err{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:30px;color:#fff;font-size:15px;line-height:1.8}
+@media (max-width:860px){
+ #app{flex-direction:column}
+ #stage{flex:none;height:60vh;height:60dvh}
+ #panel{width:auto;flex:1;border-left:0;border-top:1px solid var(--line)}
+ .pin{padding:26px 22px 24px}
+ .brand{top:12px;left:12px;padding:10px 14px;gap:12px}
+ .brand .big{font-size:24px}.brand .big i{font-size:20px}
+ .brand .sub,.brand .en{display:none}
+ #map{padding:90px 8px 8px}
+ .topctl{top:12px;right:12px;gap:6px}
+ .seg button,.pill{font-size:12.5px;padding:7px 11px}
+ .pill.round{width:34px;padding:7px 0}
+ .bl{left:12px;bottom:12px}.bl .ey,.bl h3,.bl .meta,.bl .hint{display:none}
+ .start{padding:10px 16px;font-size:13.5px}
+ .br{right:12px;bottom:12px}
+ .legend{bottom:62px;font-size:11.5px;max-width:calc(100% - 24px);overflow-x:auto}
+ #panel h1{font-size:26px}
+}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <canvas id="c" aria-label="景觀故事群島立體地圖"></canvas>
+    <div id="labels"></div>
+    <div id="map"></div>
+    <div class="brand">
+      <div class="big">景觀<br>故事<i>。</i></div>
+      <div><div class="sub">閱讀地方<br>聆聽故事</div><div class="en">LANDSCAPE STORY ISLANDS</div></div>
+    </div>
+    <div class="topctl">
+      <div class="seg" role="tablist"><button id="m3d" class="on">立體島嶼</button><button id="m2d">實際位置</button></div>
+      <div class="row">
+        <button class="pill" id="bNight">☀ 白天</button>
+        <button class="pill" id="bTheme">主題線</button>
+        <button class="pill on" id="bLabel">名牌</button>
+        <button class="pill round" id="bHelp" aria-label="操作說明">?</button>
+      </div>
+    </div>
+    <div class="bl">
+      <button class="start" id="bTour">出發，慢慢讀 →</button>
+      <div class="ey">景 觀 故 事 ・ 課 程 成 果</div>
+      <h3>點一座島，開始你的閱讀。</h3>
+      <div class="meta">9 篇 StoryMap ／ 臺灣 8 處・海外 1 處</div>
+      <div class="hint">拖曳轉動風景 ・ 滾輪縮放 ・ 點選島嶼讀故事</div>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="br">
+      <button class="pill round" id="zOut" aria-label="縮小">−</button>
+      <button class="pill round" id="zIn" aria-label="放大">+</button>
+      <button class="pill" id="bHome">回到全景</button>
+    </div>
+    <div class="modal" id="help"><div class="card">
+      <h4>怎麼逛這座群島</h4>
+      <ul>
+        <li>拖曳旋轉、滾輪或雙指縮放，右鍵拖曳可平移。</li>
+        <li>點島嶼或名牌，右側會打開那篇故事的簡介與 StoryMap 連結。</li>
+        <li>「出發，慢慢讀」會依序帶你走過九座島。</li>
+        <li>「主題線」把談同一類地景的故事連起來；「實際位置」切換到臺灣地圖。</li>
+        <li>讀過的島會打勾，進度只存在你自己的瀏覽器裡。</li>
+      </ul>
+      <button class="start" id="helpClose">知道了</button>
+    </div></div>
+    <div class="err" id="err">這個瀏覽器無法顯示 3D 場景。<br>請改用「實際位置」或右側清單閱讀故事。</div>
+  </div>
+  <aside id="panel"><div class="pin" id="pin"></div></aside>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+
+/* ---------------- data ---------------- */
+const COLLECTION='https://storymaps.arcgis.com/collections/1d3d064657d948a6af240c41a2dcaaed';
+const THEMES={
+  industry:{name:'產業地景',color:'#b5653a',ids:['mine','earth','market']},
+  water:{name:'水文地景',color:'#3c7ea0',ids:['ershui','tub']},
+  settle:{name:'聚落記憶',color:'#7c5b93',ids:['mine','dmp','ershui']},
+  city:{name:'城市與建築',color:'#c49a2c',ids:['market','yide','oldcity','thu']}
+};
+const STORIES=[
+ {id:'mine',short:'老礦坑說故事',title:'老礦坑說故事：百年聚落的歲月迴音',place:'苗栗縣公館鄉・出磺坑',lat:24.47,lon:120.87,ax:[0,-2],color:'#6d6152',
+  blurb:'出磺坑是臺灣歷史最悠久、持續生產最久的油礦區，最早因後龍溪水面浮現油花而被發現。礦區橫跨清代、日治與戰後，如今已登錄為文化景觀。這篇故事回到礦坑邊的百年聚落，追尋那些快被遺忘的地方軼事。',
+  url:'https://storymaps.arcgis.com/stories/6e1dc73e21a94448a3c4f3266c5d3641'},
+ {id:'dmp',short:'尋龍大茅埔',title:'一起尋龍去吧：台中東勢大茅埔',place:'臺中市東勢區・大茅埔',lat:24.24,lon:120.86,ax:[0,-1],color:'#b0473a',
+  blurb:'大茅埔被譽為中臺灣保存最完整的客家聚落。這處建於清道光年間的防禦性聚落，以三山國王廟泰興宮為信仰中心，至今仍留有護城河遺址與對稱的巷弄格局。故事帶讀者走進聚落，一路「尋龍」。',
+  url:'https://storymaps.arcgis.com/stories/67947618cb17498ea4922da8cc35ada5'},
+ {id:'ershui',short:'引水路的故事',title:'引水路的故事：彰化縣二水鄉',place:'彰化縣二水鄉',lat:23.81,lon:120.62,ax:[1,-1],color:'#3c7ea0',
+  blurb:'濁水溪與清水溪在二水交會，沖積出扇狀平原。故事從二水、源泉、過溪等舊地名讀起，看平埔族群如何循水而居，水文又如何寫進地名與聚落。參考《臺灣舊地名沿革》、二水鄉誌與《二水采風》。',
+  url:'https://storymaps.arcgis.com/stories/999e9e7c09be48a5822de5980a00e512'},
+ {id:'earth',short:'土方之亂',title:'土方之亂：營建廢土何處去',place:'全臺性議題（未標定單一地點）',lat:null,lon:null,ax:[-2,1],color:'#a8793f',
+  blurb:'營建剩餘土石方新制上路後，砂石車需加裝 GPS 才能載運，土資場收費暴漲數倍，工地廢土無處可去，甚至被迫停工。故事透過業者與建設公司訪談，追問一個少有人看見的地景問題：挖出來的土，最後去了哪裡？',
+  url:'https://storymaps.arcgis.com/stories/207269259d034e5bbae715ab5c33b61a'},
+ {id:'market',short:'貴婦的繁華與哀愁',title:'貴婦的繁華與哀愁',place:'高雄市・公有國民市場',lat:22.63,lon:120.30,ax:[-1,0],color:'#d07a3a',
+  blurb:'高雄市公有國民市場從繁華、衰退到轉型的歷程。一座市場的興衰，也是一段城市日常生活的變遷史。',
+  url:'https://storymaps.arcgis.com/stories/d975e1825dd84d56830177c61d12f7fc'},
+ {id:'yide',short:'一德洋樓',title:'一德洋樓',place:'臺中市・一德洋樓',lat:24.152,lon:120.692,ax:[-1,1],color:'#7c5b93',
+  blurb:'從仕紳豪宅、國軍眷村，到米其林餐廳進駐的文創園區，一棟洋樓的百年身世。故事主張城市裡的建築、河川與老樹都承載著集體記憶，是仍在延續的故事。',
+  url:'https://storymaps.arcgis.com/stories/14dc82193b7f4ede83f0f35aaaaa0092'},
+ {id:'tub',short:'潛水天堂圖巴塔哈',title:'潛水天堂：圖巴塔哈',place:'菲律賓・蘇祿海',lat:8.9,lon:119.9,pos:[31,0,24],color:'#2a9a96',
+  blurb:'群島中唯一的海外站。圖巴塔哈礁位於菲律賓蘇祿海中央，是受保護的珊瑚礁海域，也是潛水者口中的天堂。這篇故事把「景觀」從陸地延伸到海面之下。',
+  url:'https://storymaps.arcgis.com/stories/f7802caa112c475396a8a29e07093589'},
+ {id:'thu',short:'探索東海大學',title:'探索東海大學：傳遞建築、文化與生活之美',place:'臺中市西屯區・東海大學',lat:24.181,lon:120.603,ax:[1,0],color:'#c9a12e',
+  blurb:'東海大學早期校園是臺中市第 7 處文化景觀，也是國內首例登錄的校園文化景觀。故事從建築、文化與日常生活出發，談東海的文化生態價值與地方感。',
+  url:'https://storymaps.arcgis.com/stories/ee086daf2a024a289dfdac5b6ffa222f'},
+ {id:'oldcity',short:'懷舊台中舊城',title:'懷舊台中：舊城記憶',place:'臺中市中區・臺中車站一帶',lat:24.137,lon:120.686,ax:[0,1],color:'#8f3f35',
+  blurb:'臺中火車站前，紅磚與拱窗映著歲月，鐵道載過一代又一代人的離合與相逢。舊城街巷裡的人情與記憶，讓這裡不只是交通的起點，也是臺中情感的原鄉。',
+  url:'https://storymaps.arcgis.com/stories/30db4d40c0b24fbc9c059b20d9fb821b'}
+];
+STORIES.forEach((s,i)=>{s.no=i+1;s.themes=Object.entries(THEMES).filter(([k,t])=>t.ids.includes(s.id)).map(([k])=>k);});
+const BYID=Object.fromEntries(STORIES.map(s=>[s.id,s]));
+const pad=n=>String(n).padStart(2,'0');
+
+/* ---------------- state ---------------- */
+let visited=new Set();
+try{visited=new Set(JSON.parse(localStorage.getItem('lsi-visited')||'[]'));}catch(e){}
+const saveVisited=()=>{try{localStorage.setItem('lsi-visited',JSON.stringify([...visited]));}catch(e){}};
+let selected=null, mode='3d';
+
+/* ---------------- panel ---------------- */
+const pin=document.getElementById('pin'), panel=document.getElementById('panel');
+function progressHTML(){return `<div class="prog">已探索 ${visited.size}／${STORIES.length} 站 <span class="dots">${STORIES.map(s=>`<i class="${visited.has(s.id)?'on':''}"></i>`).join('')}</span></div>`;}
+function showIndex(){
+  selected=null; syncSel();
+  pin.innerHTML=`<div class="eyebrow">THE STORY INDEX</div>
+  <h1>閱讀地方，<br>聆聽故事。</h1>
+  ${progressHTML()}
+  <p class="intro"><b>每一個地方，都不只是地圖上的一個位置。</b>《景觀故事》課程的學生透過走讀、訪談、文獻、地圖判讀與參與式標註，把地方經驗編織成 StoryMap。選一座島，走進它的地方故事。</p>
+  <ul class="list">${STORIES.map(s=>`<li data-id="${s.id}" class="${visited.has(s.id)?'v':''}"><span class="num">${pad(s.no)}</span><div><div class="t">${s.short}</div><div class="p">${s.place}</div></div><span class="ar">↗</span></li>`).join('')}</ul>
+  <div class="foot"><a href="${COLLECTION}" target="_blank" rel="noopener">前往《景觀故事》StoryMap 成果集 ↗</a><br>東海大學《景觀故事》課程成果 ・ 原友蘭 製作</div>`;
+  pin.querySelectorAll('li').forEach(li=>li.onclick=()=>select(li.dataset.id));
+  panel.scrollTop=0;
+}
+function showDetail(s){
+  const i=STORIES.indexOf(s), prev=STORIES[(i+STORIES.length-1)%STORIES.length], next=STORIES[(i+1)%STORIES.length];
+  pin.innerHTML=`<button class="back" id="back">← 全部故事</button>
+  <div class="dnum" style="color:${s.color}">${pad(s.no)}</div>
+  <div class="place">${s.place}</div>
+  <div class="dt">${s.title}</div>
+  <div class="chips">${s.themes.map(k=>`<span class="chip" style="background:${THEMES[k].color}">${THEMES[k].name}</span>`).join('')}</div>
+  <p class="blurb">${s.blurb}</p>
+  <a class="cta" href="${s.url}" target="_blank" rel="noopener">閱讀完整 StoryMap ↗</a>
+  <div class="pn"><button id="pv"><small>‹ 上一站</small>${prev.short}</button><button id="nx"><small>下一站 ›</small>${next.short}</button></div>
+  <p class="note">${progressHTML()}<br>簡介整理自各篇 StoryMap 的作品說明；地圖點位為約略位置。</p>`;
+  document.getElementById('back').onclick=()=>{stopTour();showIndex();if(mode==='3d')flyHome();};
+  document.getElementById('pv').onclick=()=>{stopTour();select(prev.id);};
+  document.getElementById('nx').onclick=()=>{stopTour();select(next.id);};
+  panel.scrollTop=0;
+}
+function select(id){
+  if(id==='hub'){showIndex(); if(mode==='3d'&&three)three.flyTo(three.hubPos,34); return;}
+  const s=BYID[id]; if(!s)return;
+  selected=id; visited.add(id); saveVisited();
+  showDetail(s); syncSel();
+  if(mode==='3d'&&three) three.flyTo(three.posOf(id), id==='tub'?30:28);
+}
+const syncSelHooks=[];
+function syncSel(){syncSelHooks.forEach(f=>f());}
+showIndex();
+
+/* ---------------- 2D map ---------------- */
+const TWPATH='M652.0,87.0L641.6,99.2L640.0,101.9L639.0,105.6L637.9,109.6L637.4,113.9L637.9,117.9L639.5,126.4L639.5,128.5L638.5,130.7L639.0,135.2L640.5,138.4L644.2,140.8L648.4,141.3L648.4,142.4L646.8,142.1L645.2,142.4L643.7,142.9L642.6,143.7L644.2,146.4L644.7,149.9L644.2,153.1L641.1,154.9L640.5,156.3L641.1,157.9L642.1,159.2L642.6,160.8L641.1,162.1L637.4,164.0L633.8,168.5L633.8,170.1L633.8,174.1L633.2,175.5L632.7,176.8L632.2,178.4L631.7,181.9L631.7,182.9L631.2,183.7L630.6,184.3L631.2,185.3L631.7,185.9L632.2,186.7L632.7,187.5L632.7,188.0L631.7,189.3L628.6,192.5L625.4,197.1L622.8,199.2L621.8,200.3L622.3,201.3L621.8,202.1L618.1,205.1L616.6,206.4L615.0,209.6L613.5,216.3L609.8,222.4L608.8,224.8L608.8,227.2L609.8,230.1L610.8,231.5L611.4,232.0L611.9,232.8L611.9,234.4L611.4,236.5L609.3,239.7L608.8,241.6L608.8,245.1L606.7,253.9L603.6,263.5L598.9,285.3L596.3,290.7L590.0,326.1L587.9,340.5L586.4,343.2L582.7,348.5L581.2,351.2L580.1,354.6L579.1,360.8L579.1,366.4L578.6,371.7L576.0,377.3L574.9,378.4L572.3,380.2L571.3,381.6L570.7,382.9L569.7,386.1L567.1,390.6L565.5,397.8L564.0,401.3L558.8,409.3L557.7,410.9L550.4,417.3L548.3,419.4L548.3,421.0L548.3,424.5L548.3,426.1L547.8,427.7L546.8,429.6L544.2,433.0L541.6,435.4L532.7,441.6L526.5,448.0L524.9,448.8L523.9,450.4L521.3,457.8L519.7,460.5L515.0,466.1L513.4,469.6L512.4,476.2L509.8,485.5L504.6,494.9L503.5,498.1L503.0,506.9L503.0,515.1L503.5,543.9L502.5,547.9L500.9,551.1L499.4,552.5L497.3,554.6L497.3,559.4L497.8,564.5L497.8,567.7L495.2,563.9L491.6,561.0L487.4,559.1L482.7,558.1L482.7,561.5L481.7,562.9L479.6,562.6L477.5,560.7L477.5,559.4L478.0,555.7L474.9,550.3L474.9,549.0L474.9,547.9L474.9,546.1L474.9,540.2L475.4,538.3L477.0,536.5L477.0,534.9L466.0,506.1L465.0,504.5L461.9,500.7L459.8,495.1L458.8,493.5L454.1,490.1L452.5,489.0L452.0,488.7L450.9,488.5L450.4,486.3L450.4,485.5L447.8,483.9L442.6,481.3L440.0,479.7L437.4,477.3L435.8,476.5L434.3,475.7L433.7,475.9L432.7,476.2L431.1,476.2L424.4,470.6L417.6,461.0L424.4,469.6L423.9,465.6L422.3,463.4L421.8,461.6L418.6,458.1L413.4,453.6L411.9,451.2L410.8,448.5L411.9,446.1L412.9,443.7L411.9,440.5L410.3,437.3L407.7,433.0L405.1,427.4L404.6,425.0L404.6,423.4L405.6,421.3L405.6,420.0L405.1,419.4L404.6,418.9L404.1,418.1L403.5,416.8L402.0,414.1L401.5,413.0L400.4,405.6L399.9,402.1L398.8,400.0L396.8,397.8L399.4,396.0L400.9,392.5L400.4,389.8L396.8,389.3L396.2,390.4L395.7,392.2L394.7,393.6L392.6,393.6L392.1,392.2L392.1,388.5L391.6,387.2L389.5,386.1L388.4,387.2L387.4,388.8L385.8,389.3L384.3,388.0L383.7,385.8L384.3,384.0L384.8,382.6L386.3,381.8L388.4,381.6L390.0,381.0L390.5,379.4L390.0,378.6L384.8,377.3L384.8,376.2L389.0,376.2L388.4,374.6L386.3,372.8L384.8,370.9L385.3,368.8L386.3,368.0L387.9,367.4L389.0,366.1L388.4,363.7L387.4,362.1L387.9,360.5L389.0,358.4L390.0,357.0L390.0,355.7L390.0,354.4L392.1,349.6L392.6,348.5L394.2,348.2L392.1,346.9L393.1,344.5L395.2,344.5L396.8,343.7L397.8,344.0L397.3,342.1L396.2,342.9L395.2,342.6L393.6,342.6L393.6,340.8L395.2,337.8L397.3,337.6L399.9,337.6L397.8,332.0L395.7,327.4L396.8,325.3L396.8,324.2L395.2,323.4L395.2,322.6L396.2,321.3L396.8,320.0L398.8,317.0L394.2,317.3L394.2,312.5L396.8,309.8L396.8,300.8L396.8,294.1L398.3,288.5L400.9,284.3L401.5,278.9L403.0,274.1L403.5,272.5L407.2,268.0L407.7,266.4L407.7,265.6L410.8,263.2L411.9,261.6L412.9,257.6L413.4,256.0L417.6,252.3L418.6,250.7L420.2,246.4L422.3,242.1L425.4,233.3L427.0,230.9L428.5,229.1L430.1,228.3L431.1,227.7L432.2,226.9L432.2,225.3L432.7,223.7L435.8,221.6L436.4,220.0L436.9,214.4L437.4,212.8L439.0,211.5L445.2,204.3L445.2,203.7L445.7,201.9L447.3,200.5L448.9,196.8L450.4,190.1L455.6,181.3L457.2,176.0L458.8,172.8L466.0,164.8L470.2,160.5L471.3,158.1L471.8,154.7L472.8,151.5L475.9,145.9L477.0,142.4L478.0,141.1L481.7,140.0L482.7,138.7L483.2,137.3L483.8,136.0L486.4,133.6L489.0,131.7L492.1,130.9L495.7,131.7L495.2,128.5L496.8,126.7L498.9,124.5L499.9,121.3L500.4,120.5L502.5,119.5L503.0,116.5L506.2,110.4L507.2,108.8L507.7,107.8L507.7,107.0L507.2,105.9L506.7,104.8L507.7,103.2L508.8,102.2L509.3,100.8L509.8,98.7L510.3,97.1L511.4,95.5L512.9,94.4L514.0,93.9L514.0,93.4L514.5,91.8L515.5,88.3L516.6,86.7L521.8,79.0L525.4,74.4L529.6,71.0L539.5,67.8L542.1,66.2L544.2,64.6L546.3,63.2L551.5,61.4L562.4,59.5L568.7,58.4L571.3,57.4L574.9,54.4L575.4,53.9L577.0,53.9L578.6,53.9L580.6,54.4L581.7,55.8L582.2,57.4L583.2,58.2L584.8,57.4L583.2,54.4L579.6,51.2L578.0,50.2L578.6,48.6L579.6,47.8L580.6,47.2L581.2,46.7L582.2,44.0L583.8,40.8L587.4,37.6L593.1,35.0L598.9,33.6L605.1,34.2L607.2,36.0L612.9,43.8L615.0,47.8L615.5,47.5L617.1,47.2L618.7,47.0L619.7,47.2L619.7,47.8L619.2,48.6L618.7,49.4L618.7,50.7L619.2,51.2L621.3,52.8L621.8,53.4L622.8,54.2L624.9,55.0L649.9,61.1L652.0,62.2L651.0,64.0L651.0,65.6L651.0,68.6L652.5,73.4L654.1,75.5L655.1,76.0L658.8,75.5L660.9,75.5L662.9,76.3L665.0,77.4L666.6,78.7L655.1,84.3L652.0,87.0ZM602.5,545.5L605.1,547.7L606.2,549.0L606.2,550.3L603.0,551.4L598.9,549.8L595.2,547.1L593.1,545.0L593.7,543.7L593.7,542.1L593.1,540.7L592.1,539.7L603.0,539.7L603.0,540.7L602.5,541.3L602.0,542.6L602.0,544.2L602.5,545.5ZM143.6,154.4L147.8,153.6L151.9,157.1L154.6,164.0L154.0,168.8L151.9,171.2L147.8,168.8L145.2,168.0L141.0,168.5L136.8,170.9L134.8,174.1L132.7,175.2L130.6,174.1L129.0,174.1L128.0,173.6L127.5,172.3L127.5,172.0L128.5,170.4L129.0,169.6L129.0,168.5L129.0,167.2L128.5,164.8L128.0,162.7L127.5,161.3L128.5,161.1L132.7,158.9L138.4,162.7L142.1,162.1L142.6,157.3L143.6,154.4ZM325.4,299.4L328.0,304.2L328.5,306.4L328.0,308.0L327.0,306.9L325.9,306.1L324.4,305.8L322.3,306.9L320.7,307.2L319.7,307.7L319.2,308.5L318.6,310.6L318.1,311.2L315.5,312.8L312.9,313.0L310.3,312.2L307.7,309.6L308.2,308.0L309.8,309.8L312.4,310.4L314.5,309.6L316.5,308.0L315.0,307.7L313.9,306.9L313.4,306.1L312.4,304.8L311.9,305.3L311.9,305.6L311.3,305.8L311.3,303.7L311.3,301.6L312.4,301.6L313.4,301.8L317.6,299.2L320.2,298.4L319.7,300.8L319.2,301.6L321.2,300.8L323.3,301.0L324.4,301.0L325.4,299.4ZM300.4,299.4L302.5,293.8L304.0,292.0L306.1,294.1L305.1,294.9L304.0,296.8L302.5,301.6L302.5,302.6L303.0,303.7L302.5,304.5L300.9,304.8L299.9,304.8L298.8,305.0L298.3,305.3L297.8,305.8L295.7,305.8L295.7,304.8L296.8,304.0L297.8,303.7L298.8,303.7L300.4,303.2L300.4,302.1L300.4,299.4ZM314.5,295.7L313.9,293.8L312.9,292.3L310.3,289.9L313.4,287.5L315.5,288.5L317.1,289.9L317.6,291.7L316.5,292.8L317.1,294.9L316.0,296.0L315.0,296.5L314.5,295.7ZM587.4,448.5L586.9,446.4L586.9,445.8L592.6,445.6L593.1,445.8L593.7,446.9L593.1,449.0L592.6,450.1L592.6,450.9L592.6,451.7L592.6,452.5L592.1,452.2L591.1,452.2L590.5,452.2L590.5,452.0L589.0,451.4L587.4,448.5ZM379.6,323.4L386.9,315.7L393.1,308.2L394.2,307.7L389.5,316.0L386.9,318.4L385.3,320.2L383.2,322.4L381.7,323.4L379.1,325.6L377.5,326.4L379.6,323.4Z';
+const K=Math.cos(23.6*Math.PI/180), SC=600/3.8, LON0=117.4, LAT1=25.5;
+const prj=(lat,lon)=>[(lon-LON0)*K*SC,(LAT1-lat)*SC];
+(function buildMap(){
+  const W=723,H=600;
+  // Taichung inset
+  const ib={lon0:120.54,lon1:120.92,lat0:24.11,lat1:24.29}, iw=300, isc=iw/((ib.lon1-ib.lon0)*K), ih=(ib.lat1-ib.lat0)*isc, ix=28, iy=44;
+  const ip=(lat,lon)=>[ix+(lon-ib.lon0)*K*isc, iy+(ib.lat1-lat)*isc];
+  const tcIds=['dmp','thu','yide','oldcity'];
+  const [rx0,ry0]=prj(ib.lat1,ib.lon0), [rx1,ry1]=prj(ib.lat0,ib.lon1);
+  const pt=(s,x,y,lx,anchor,big)=>`<g class="mpt" data-id="${s.id}"><circle class="c" cx="${x}" cy="${y}" r="${big?11:9}" fill="${s.color}" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y+3.6}" text-anchor="middle" font-size="${big?11:9.5}" font-weight="700" fill="#fff">${s.no}</text><text x="${x+lx}" y="${y+4.5}" text-anchor="${anchor}" font-size="${big?14:13}" font-weight="700" fill="#2a2924" paint-order="stroke" stroke="#efe8d9" stroke-width="4">${s.short}</text></g>`;
+  let g='';
+  for(const s of STORIES){
+    if(s.lat==null||s.id==='tub')continue;
+    const [x,y]=prj(s.lat,s.lon);
+    if(tcIds.includes(s.id)) g+=`<circle cx="${x}" cy="${y}" r="3.2" fill="${s.color}"/>`;
+    else g+=pt(s,x,y,-16,'end');
+  }
+  const off={dmp:[-17,'end'],thu:[17,'start'],yide:[16,'start'],oldcity:[16,'start']};
+  let ins='';
+  for(const id of tcIds){const s=BYID[id];let [x,y]=ip(s.lat,s.lon); if(id==='oldcity')y+=6; if(id==='yide')y-=6; ins+=pt(s,x,y,off[id][0],off[id][1],true);}
+  const earth=BYID.earth, tub=BYID.tub;
+  pinMap(`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+   <defs><pattern id="wv" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M0 7 q3.5 -3 7 0 t7 0" fill="none" stroke="#d8cfbc" stroke-width="1"/></pattern></defs>
+   <rect width="${W}" height="${H}" fill="url(#wv)"/>
+   <path d="${TWPATH}" fill="#c9d3b0" stroke="#8c9a74" stroke-width="1.2"/>
+   <rect x="${rx0}" y="${ry0}" width="${rx1-rx0}" height="${ry1-ry0}" fill="none" stroke="#3f5e4c" stroke-width="1.3" stroke-dasharray="4 3"/>
+   <path d="M${ix+iw+14} ${iy+ih/2} L${rx0} ${(ry0+ry1)/2}" stroke="#3f5e4c" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
+   ${g}
+   <g><rect x="${ix-14}" y="${iy-30}" width="${iw+28}" height="${ih+50}" rx="12" fill="#fbf8f1" stroke="#d9d0bd"/>
+   <text x="${ix}" y="${iy-11}" font-size="12" font-weight="700" fill="#a8673a" letter-spacing="2">臺中放大</text>${ins}</g>
+   <g class="mpt" data-id="earth"><rect x="${ix-14}" y="300" width="${iw-20}" height="62" rx="12" fill="#fbf8f1" stroke="#d9d0bd"/>
+     <circle class="c" cx="${ix+6}" cy="331" r="9" fill="${earth.color}" stroke="#fff" stroke-width="2"/><text x="${ix+6}" y="334.6" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">${earth.no}</text>
+     <text x="${ix+24}" y="326" font-size="13.5" font-weight="700" fill="#2a2924">${earth.short}</text><text x="${ix+24}" y="345" font-size="11.5" fill="#6f6a5e">全臺性的制度議題，未標定單一地點</text></g>
+   <g class="mpt" data-id="tub"><rect x="${ix-14}" y="384" width="${iw-20}" height="120" rx="12" fill="#fbf8f1" stroke="#d9d0bd"/>
+     <text x="${ix}" y="406" font-size="12" font-weight="700" fill="#a8673a" letter-spacing="2">海外站 ↓ 往南</text>
+     <ellipse cx="${ix+70}" cy="456" rx="40" ry="24" fill="#bfe3df" stroke="#2a9a96" stroke-width="1.2"/><ellipse cx="${ix+70}" cy="456" rx="22" ry="12" fill="#e9dfbf"/>
+     <circle class="c" cx="${ix+70}" cy="456" r="11" fill="${tub.color}" stroke="#fff" stroke-width="2"/><text x="${ix+70}" y="460" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${tub.no}</text>
+     <text x="${ix+120}" y="450" font-size="14" font-weight="700" fill="#2a2924">${tub.short}</text><text x="${ix+120}" y="470" font-size="11.5" fill="#6f6a5e">菲律賓・蘇祿海</text></g>
+   <text x="${W-24}" y="${H-40}" text-anchor="end" font-size="13" font-weight="700" fill="#3f5e4c">實際位置</text>
+   <text x="${W-24}" y="${H-22}" text-anchor="end" font-size="11" fill="#6f6a5e">點位為約略位置，僅供對照</text>
+  </svg>`);
+  function pinMap(html){const m=document.getElementById('map');m.innerHTML=html;
+    m.querySelectorAll('.mpt').forEach(el=>el.addEventListener('click',()=>{stopTour();select(el.dataset.id);}));
+    syncSelHooks.push(()=>m.querySelectorAll('.mpt').forEach(el=>el.classList.toggle('sel',el.dataset.id===selected)));}
+})();
+
+/* ---------------- controls (UI) ---------------- */
+const $=id=>document.getElementById(id);
+$('m3d').onclick=()=>setMode('3d'); $('m2d').onclick=()=>setMode('2d');
+function setMode(m){mode=m;$('m3d').classList.toggle('on',m==='3d');$('m2d').classList.toggle('on',m==='2d');$('map').classList.toggle('show',m==='2d');
+  document.querySelectorAll('#bTheme,#bLabel,#bNight,.br,.bl').forEach(e=>e.style.visibility=m==='2d'?'hidden':'');
+  $('legend').classList.toggle('show',m==='3d'&&themeOn);
+  if(m==='2d')stopTour(); else if(three&&selected)three.flyTo(three.posOf(selected),28);}
+let themeOn=false;
+$('bTheme').onclick=()=>{themeOn=!themeOn;$('bTheme').classList.toggle('on',themeOn);$('legend').classList.toggle('show',themeOn);three&&three.setThemes(themeOn);};
+$('legend').innerHTML=Object.values(THEMES).map(t=>`<span><b style="background:${t.color}"></b>${t.name}</span>`).join('');
+let labelsOn=true;
+$('bLabel').onclick=()=>{labelsOn=!labelsOn;$('bLabel').classList.toggle('on',labelsOn);$('labels').classList.toggle('hide-labels',!labelsOn);};
+let night=false;
+$('bNight').onclick=()=>{night=!night;$('bNight').textContent=night?'☾ 夜晚':'☀ 白天';$('bNight').classList.toggle('on',night);};
+$('bHelp').onclick=()=>$('help').classList.add('show'); $('helpClose').onclick=()=>$('help').classList.remove('show');
+$('help').onclick=e=>{if(e.target.id==='help')$('help').classList.remove('show');};
+let tourTimer=null,tourIdx=0;
+function stopTour(){if(tourTimer){clearTimeout(tourTimer);tourTimer=null;}$('bTour').classList.remove('on');$('bTour').textContent='出發，慢慢讀 →';}
+function tourStep(){select(STORIES[tourIdx%STORIES.length].id);tourIdx++;tourTimer=setTimeout(tourStep,7500);}
+$('bTour').onclick=()=>{if(tourTimer){stopTour();return;} if(mode!=='3d')setMode('3d');$('bTour').classList.add('on');$('bTour').textContent='■ 停止導覽';
+  tourIdx=selected?STORIES.findIndex(s=>s.id===selected)+1:0; tourStep();};
+function flyHome(){three&&three.home();}
+$('bHome').onclick=()=>{stopTour();flyHome();};
+$('zIn').onclick=()=>three&&three.zoom(.75); $('zOut').onclick=()=>three&&three.zoom(1.33);
+
+/* ---------------- 3D ---------------- */
+let three=null;
+try{three=init3D();}catch(e){console.error(e);$('err').style.display='flex';setMode('2d');}
+
+function init3D(){
+const S=5, D=S*1.22, TOP=0.3, WATER=-0.85;
+const axPos=(q,r)=>new THREE.Vector3(D*Math.sqrt(3)*(q+r/2),0,D*1.5*r);
+const stage=$('stage'), canvas=$('c');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const scene=new THREE.Scene(); scene.background=new THREE.Color('#cfe0dc'); scene.fog=new THREE.Fog('#cfe0dc',120,280);
+const camera=new THREE.PerspectiveCamera(34,1,.5,700);
+const controls=new OrbitControls(camera,canvas);
+controls.enableDamping=true; controls.dampingFactor=.08; controls.minDistance=14; controls.maxDistance=170; controls.maxPolarAngle=1.22; controls.minPolarAngle=.2; controls.screenSpacePanning=false;
+const HOME_T=new THREE.Vector3(8,0,8), HOME_P=new THREE.Vector3(18,72,90);
+camera.position.copy(HOME_P); controls.target.copy(HOME_T);
+
+const hemi=new THREE.HemisphereLight('#ffffff','#8a9a7a',1.0); scene.add(hemi);
+const sun=new THREE.DirectionalLight('#fff3dd',2.0); sun.position.set(38,62,28); sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048); Object.assign(sun.shadow.camera,{left:-48,right:48,top:48,bottom:-48,near:1,far:200});
+sun.shadow.bias=-.0005; sun.shadow.normalBias=.04; scene.add(sun);
+const hubLight=new THREE.PointLight('#ffcf8a',0,40,1.6); hubLight.position.set(0,6,0); scene.add(hubLight);
+
+const mats={};
+const M=c=>mats[c]||(mats[c]=new THREE.MeshStandardMaterial({color:c,roughness:.92,flatShading:true}));
+const winMat=new THREE.MeshStandardMaterial({color:'#4a4740',emissive:'#ffc46b',emissiveIntensity:0,roughness:.6,flatShading:true});
+const lampMat=new THREE.MeshStandardMaterial({color:'#e8dcc0',emissive:'#ffd28a',emissiveIntensity:0,roughness:.5});
+function mesh(geo,mat,x,y,z,p){const m=new THREE.Mesh(geo,typeof mat==='string'?M(mat):mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;p.add(m);return m;}
+const box=(p,w,h,d,c,x,y,z,ry=0)=>{const m=mesh(new THREE.BoxGeometry(w,h,d),c,x,y+h/2,z,p);m.rotation.y=ry;return m;};
+const cyl=(p,rt,rb,h,c,x,y,z,seg=8)=>mesh(new THREE.CylinderGeometry(rt,rb,h,seg),c,x,y+h/2,z,p);
+const cone=(p,r,h,c,x,y,z,seg=6)=>mesh(new THREE.ConeGeometry(r,h,seg),c,x,y+h/2,z,p);
+const ball=(p,r,c,x,y,z,det=0)=>mesh(new THREE.IcosahedronGeometry(r,det),c,x,y,z,p);
+const GREENS=['#6f8f4e','#7f9b57','#5f7f45','#88a35e'];
+let seed=7; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+function tree(p,x,z,s=1,kind='round'){
+  if(kind==='pine'){cyl(p,.09*s,.12*s,.5*s,'#6b4f3a',x,0,z,5);cone(p,.72*s,1.9*s,'#4f6f45',x,.4*s,z,6);return;}
+  if(kind==='palm'){const t=cyl(p,.08*s,.12*s,2.2*s,'#8a6a48',x,0,z,5);t.rotation.z=.18;for(let i=0;i<5;i++){const l=cone(p,.25*s,1.3*s,'#5f9a4a',x+.35*s,2.1*s,z,4);l.rotation.set(1.25,i*1.256,0,'YXZ');}return;}
+  cyl(p,.1*s,.14*s,.75*s,'#6b4f3a',x,0,z,5);
+  ball(p,.78*s,GREENS[Math.floor(rnd()*GREENS.length)],x,1.25*s,z).rotation.y=rnd()*3;
+}
+function person(p,x,z,c='#5b6f8a'){cyl(p,.13,.17,.55,c,x,0,z,6);ball(p,.13,'#e2c3a0',x,.7,z);}
+function lamp(p,x,z){cyl(p,.04,.05,1.3,'#3b3a36',x,0,z,5);mesh(new THREE.SphereGeometry(.15,8,6),lampMat,x,1.38,z,p);}
+function windows(g,w,h,d,face=1){const n=Math.max(1,Math.floor(w/.85));for(let i=0;i<n;i++){const x=-w/2+w*(i+.5)/n;mesh(new THREE.BoxGeometry(.3,.34,.05),winMat,x,h*.55,face*(d/2+.02),g);}}
+function house(p,x,z,w,d,h,wall,roof,ry=0,o={}){
+  const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=ry;p.add(g);
+  box(g,w,h,d,wall,0,0,0); const ov=.18, rh=o.rh??Math.min(w,d)*.5;
+  if(o.hip){const geo=new THREE.ConeGeometry((w/2+ov)*Math.SQRT2,rh,4);geo.rotateY(Math.PI/4);const r=mesh(geo,roof,0,h+rh/2,0,g);r.scale.z=(d+2*ov)/(w+2*ov);}
+  else{const sh=new THREE.Shape();sh.moveTo(-w/2-ov,0);sh.lineTo(w/2+ov,0);sh.lineTo(0,rh);sh.closePath();const geo=new THREE.ExtrudeGeometry(sh,{depth:d+ov*2,bevelEnabled:false});geo.translate(0,0,-(d+ov*2)/2);mesh(geo,roof,0,h,0,g);}
+  windows(g,w,h,d,1);windows(g,w,h,d,-1);
+  if(o.door!==false)box(g,.38,.6,.06,'#4a3a2e',o.doorX??0,0,d/2+.02);
+  return g;
+}
+function strip(p,x1,z1,x2,z2,w,c,y=.02,h=.05){const dx=x2-x1,dz=z2-z1,L=Math.hypot(dx,dz);const m=box(p,w,h,L,c,(x1+x2)/2,y,(z1+z2)/2,Math.atan2(dx,dz));return m;}
+const flatRing=(p,r0,r1,c,y=.03,seg=24)=>{const g=new THREE.RingGeometry(r0,r1,seg);g.rotateX(-Math.PI/2);const m=mesh(g,c,0,y,0,p);m.castShadow=false;return m;};
+const disc=(p,r,c,x,z,y=.03,seg=24)=>{const m=cyl(p,r,r,.05,c,x,y-.025,z,seg);m.castShadow=false;return m;};
+
+const anim=[]; // per-frame callbacks (t,dt)
+
+/* ---- island builders (ground y=0) ---- */
+const B={};
+B.hub=c=>{
+  disc(c,3.3,'#d9cfb6',0,0,.03,6).rotation.y=0;
+  // open book
+  box(c,5.2,.25,3.6,'#3f5e4c',0,0,0);
+  const pg1=box(c,2.45,.22,3.3,'#f3ead8',-1.28,.32,0);pg1.rotation.z=.12;
+  const pg2=box(c,2.45,.22,3.3,'#f3ead8',1.28,.32,0);pg2.rotation.z=-.12;
+  // map lines on pages
+  strip(c,-2.2,-1,-.5,.8,.08,'#3c7ea0',.6);strip(c,.4,-1.2,2.2,.3,.08,'#b5653a',.6);
+  const pins=[['#b0473a',-1.6,-.6],['#3c7ea0',-.9,.6],['#c9a12e',1,-.8],['#7c5b93',1.7,.2],['#2a9a96',.8,.9]];
+  pins.forEach(([col,x,z])=>{cone(c,.09,.5,col,x,.55,z,6).rotation.x=Math.PI;ball(c,.2,col,x,1.28,z,1);});
+  // flag
+  cyl(c,.06,.06,4.2,'#5a4a3c',-3.2,0,-1.6,6);
+  const fl=new THREE.Mesh(new THREE.PlaneGeometry(1.5,.9,6,1),new THREE.MeshStandardMaterial({color:'#a8673a',side:THREE.DoubleSide,flatShading:true}));fl.position.set(-2.45,3.7,-1.6);fl.castShadow=true;c.add(fl);
+  const fp=fl.geometry.attributes.position, fb=Float32Array.from(fp.array);
+  anim.push(t=>{for(let i=0;i<fp.count;i++){const x=fb[i*3];fp.setZ(i,Math.sin(t*3+x*3)*.12*(x+.75));}fp.needsUpdate=true;});
+  // benches & trees
+  for(let i=0;i<5;i++){const a=Math.PI*.15+i*Math.PI*.18;box(c,1,.3,.35,'#8a6a48',Math.cos(a)*2.9,0,Math.sin(a)*2.9+.2,-a+Math.PI/2);}
+  tree(c,3.4,-1.8,1.1);tree(c,-3.6,1.6,1);tree(c,2.6,-3,.8,'pine');tree(c,-1.6,-3.4,.9);
+  person(c,-.6,2.6,'#a8673a');person(c,.5,2.8,'#3f5e4c');person(c,1.4,2.4,'#5b6f8a');
+  lamp(c,-2.6,2.4);lamp(c,2.6,2.2);
+};
+B.mine=c=>{
+  cone(c,2.5,3.2,'#7f8f5e',-1.8,0,-1.8,7);cone(c,1.9,2.4,'#8a9966',-3.2,0,.4,7);
+  const md=box(c,2.4,1.4,1.8,'#8c7a5f',1.6,0,-2.4);
+  box(c,.9,.95,.1,'#2a2622',1.6,0,-1.47);box(c,1.15,.18,.16,'#5a4636',1.6,.95,-1.45);
+  // derrick
+  const dg=new THREE.ConeGeometry(1.05,4.6,4,3,true); dg.rotateY(Math.PI/4);
+  const dm=new THREE.Mesh(dg,new THREE.MeshBasicMaterial({color:'#4b3b2e',wireframe:true}));dm.position.set(-.6,2.3,1.2);c.add(dm);
+  box(c,.5,.3,.5,'#4b3b2e',-.6,4.5,1.2);
+  // tanks
+  [[2.4,1.4],[3.3,.5]].forEach(([x,z])=>{cyl(c,.65,.65,1.1,'#ddd6c6',x,0,z,12);mesh(new THREE.SphereGeometry(.65,12,6,0,Math.PI*2,0,Math.PI/2),'#cfc7b5',x,1.1,z,c);});
+  // rails + cart
+  strip(c,-2.8,2.9,1.6,-1.4,.06,'#555',.04,.08);strip(c,-2.4,3.2,2.0,-1.1,.06,'#555',.04,.08);
+  for(let i=0;i<9;i++){const k=i/8;box(c,.9,.05,.18,'#7a5b3e',-2.6+k*4.4,0,3.05-k*4.3,Math.atan2(4.4,-4.3)+Math.PI/2);}
+  const cart=new THREE.Group();c.add(cart);box(cart,.7,.45,.5,'#5d5248',0,.12,0);ball(cart,.22,'#2b2b2b',0,.75,0);
+  cart.rotation.y=Math.atan2(4.4,-4.3);
+  anim.push(t=>{const k=.15+.35*(1+Math.sin(t*.5));cart.position.set(-2.6+k*4.4*.85,0,3.05-k*4.3*.85);});
+  house(c,-3,2.6,1.3,1,.9,'#d8cdb6','#6b5a4a',.4);house(c,3.3,-.8,1.1,1,.8,'#e1d6bf','#7b4b3a',-.3);
+  tree(c,0,3.6,.8,'pine');tree(c,-3.8,-1.6,.9,'pine');tree(c,3.2,2.9,.8);lamp(c,.6,-.6);
+};
+B.dmp=c=>{
+  flatRing(c,3.15,3.75,'#5aa0b5',.04,6).rotation.y=Math.PI/6;
+  // temple
+  const tg=new THREE.Group();tg.position.set(0,0,-.4);c.add(tg);
+  box(tg,2.2,.25,1.7,'#bfb3a0',0,0,0);box(tg,1.9,1.05,1.3,'#a8432f',0,.25,0);
+  const tr=house(tg,0,0,1.9,1.3,0,'#a8432f','#d08a30',0,{rh:.75,door:false});tr.position.y=1.3;
+  box(tg,2.3,.08,.08,'#d08a30',0,2.05,0);cone(tg,.12,.35,'#d08a30',1.15,2.0,0,4);cone(tg,.12,.35,'#d08a30',-1.15,2.0,0,4);
+  box(tg,.55,.7,.06,'#5a2a20',0,.25,.67);
+  ball(tg,.14,'#e0402e',-.7,1.15,.75);ball(tg,.14,'#e0402e',.7,1.15,.75);
+  // 三合院
+  const sh=(x,z,ry)=>{const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=ry;c.add(g);
+    house(g,0,-.55,1.8,.7,.75,'#ebe0ca','#9a4a35',0,{doorX:0});house(g,-1.05,.2,.6,1.1,.65,'#ebe0ca','#9a4a35',Math.PI/2,{door:false});house(g,1.05,.2,.6,1.1,.65,'#ebe0ca','#9a4a35',-Math.PI/2,{door:false});disc(g,.5,'#d9cdb0',0,.25,.03,8);};
+  sh(-1.6,1.7,.35);sh(1.7,1.6,-.35);
+  // gate bridges
+  [0,Math.PI/2,Math.PI,-Math.PI/2].forEach(a=>{box(c,.7,.12,.9,'#9c7b52',Math.sin(a)*3.45,0,Math.cos(a)*3.45,a);});
+  tree(c,-3.9,-1.2,.9);tree(c,3.9,-1.4,.9);tree(c,0,-4,.8,'pine');tree(c,-2.4,-3,.7);tree(c,2.6,-3,.7);
+  [[-1.2,.6],[1.2,.6]].forEach(([x,z])=>{cyl(c,.03,.03,1.6,'#5a4a3c',x,0,z,4);box(c,.04,.8,.35,'#e0b030',x,.7,z+.18);});
+  person(c,.5,1.3,'#a8432f');lamp(c,-.9,-2.3);lamp(c,.9,-2.3);
+};
+B.ershui=c=>{
+  const W='#5a9fbe';
+  strip(c,-3.9,-2.4,-.1,.4,.9,W);strip(c,3.9,-2.6,.1,.4,.75,W);strip(c,0,.2,0,4.4,1.2,W);
+  // paddies
+  const pad=(x,z,ry)=>{const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=ry;c.add(g);
+    for(let i=0;i<3;i++)for(let j=0;j<2;j++){box(g,.95,.1,.8,j%2?'#9cc06a':'#b6cf7c',(i-1)*1.02,0,(j-.5)*.86);for(let r=0;r<4;r++)box(g,.85,.08,.05,'#6f9a45',(i-1)*1.02,.1,(j-.5)*.86-.3+r*.2);}};
+  pad(-2.4,1.6,.15);pad(2.3,1.7,-.15);pad(0,-2.9,0);
+  // waterwheel
+  const ww=new THREE.Group();ww.position.set(.95,.75,2.2);c.add(ww);
+  const rim=new THREE.Mesh(new THREE.TorusGeometry(.75,.08,6,16),M('#7a5b3e'));rim.rotation.y=Math.PI/2;rim.castShadow=true;ww.add(rim);
+  for(let i=0;i<6;i++){const s=mesh(new THREE.BoxGeometry(.06,1.5,.07),'#8a6a48',0,0,0,ww);s.rotation.x=i*Math.PI/6;}
+  for(let i=0;i<8;i++){const a=i*Math.PI/4;mesh(new THREE.BoxGeometry(.35,.08,.25),'#8a6a48',0,Math.sin(a)*.8,Math.cos(a)*.8,ww).rotation.x=-a;}
+  box(c,.12,.8,.12,'#5a4636',.95,0,1.75);box(c,.12,.8,.12,'#5a4636',.95,0,2.65);
+  anim.push((t,dt)=>{ww.rotation.x-=dt*.8;});
+  // sluice + house
+  box(c,1.5,.6,.2,'#9c968a',0,0,-.3);house(c,-3,-.4,1.2,.9,.8,'#e6dcc6','#7b4b3a',.5);
+  tree(c,3.4,-.3,.9);tree(c,-1.4,-1.4,.7);tree(c,3.3,3.2,.7,'pine');tree(c,-3.5,3.3,.8);
+  person(c,-1.9,2.9,'#8a6a48');
+};
+B.earth=c=>{
+  disc(c,3.6,'#b08a5f',0,0,.03,6);
+  [[-1.6,-1.4,1.5,1.6],[-2.6,.6,1.1,1.1],[.2,-2.4,1.2,1.2],[-.6,.2,.9,.8]].forEach(([x,z,r,h])=>cone(c,r,h,'#9b7350',x,0,z,7));
+  // dump truck
+  const tk=new THREE.Group();tk.position.set(1.6,0,1.3);tk.rotation.y=-.6;c.add(tk);
+  box(tk,.9,.8,.9,'#d9a441',.95,.25,0);box(tk,1.5,.12,1,'#3b3a36',0,.25,0);
+  const bed=box(tk,1.5,.6,1,'#c58a2a',-.3,.38,0);bed.rotation.z=.25;
+  [[-.6,.48],[.6,.48],[-.6,-.48],[.6,-.48]].forEach(([x,z])=>{const w=cyl(tk,.25,.25,.2,'#2b2b2b',x,.25,z,10);w.rotation.x=Math.PI/2;w.position.y=.25;});
+  // excavator
+  const ex=new THREE.Group();ex.position.set(1.6,0,-1.6);ex.rotation.y=2.2;c.add(ex);
+  box(ex,1.3,.3,1,'#3b3a36',0,0,0);box(ex,1.1,.6,.9,'#e0b23a',0,.3,0);box(ex,.5,.5,.5,'#cfa030',.3,.9,.2);
+  const a1=box(ex,.18,1.4,.18,'#e0b23a',-.45,.7,0);a1.rotation.z=.7;const a2=box(ex,.15,1.1,.15,'#e0b23a',-1.35,.9,0);a2.rotation.z=-.5;box(ex,.4,.35,.35,'#555',-1.7,.35,0);
+  anim.push(t=>{ex.rotation.y=2.2+Math.sin(t*.6)*.35;});
+  // fence + sign
+  for(let i=0;i<7;i++){const x=-3.3+i*.75;box(c,.6,.35,.06,i%2?'#e9e4d8':'#e07a2e',x,.25,3.4);cyl(c,.04,.04,.7,'#666',x-.3,0,3.4,4);}
+  const sg=cone(c,.42,.7,'#f0c43a',-3.1,.7,-2.6,3);sg.rotation.x=Math.PI/2;sg.rotation.z=0;cyl(c,.04,.04,.75,'#555',-3.1,0,-2.6,4);
+  person(c,.4,2.4,'#e07a2e');person(c,-.3,2.6,'#5b6f8a');
+  tree(c,3.6,-.4,.8);tree(c,-3.9,2,.7,'pine');
+};
+B.market=c=>{
+  const hg=new THREE.Group();hg.position.set(0,0,-1.3);c.add(hg);
+  house(hg,0,0,4.2,2,1.4,'#e6ddcc','#5f7480',0,{rh:.9,door:false});
+  box(hg,1.1,1,.08,'#33302b',0,0,1.02);box(hg,2.2,.42,.1,'#a8432f',0,1.45,1.06);
+  // stalls
+  const stall=(x,z,c1,c2)=>{box(c,1,.55,.6,'#8a6a48',x,0,z);for(let i=0;i<5;i++)box(c,.2,.06,.8,i%2?c1:c2,x-.4+i*.2,1.25,z+.1);cyl(c,.03,.03,1.25,'#555',x-.48,0,z+.45,4);cyl(c,.03,.03,1.25,'#555',x+.48,0,z+.45,4);
+    ['#e2672e','#e9c13a','#7aa84a','#c43a32'].forEach((fc,i)=>ball(c,.1,fc,x-.3+i*.2,.65,z));};
+  stall(-2.2,1.4,'#c43a32','#f3ead8');stall(-.6,1.9,'#3f7f9a','#f3ead8');stall(1.1,1.6,'#3f5e4c','#f3ead8');
+  // crates & scooters
+  for(let i=0;i<3;i++)box(c,.4,.3,.4,'#b08a5f',2.6+i*.1,i*.3,.2+i*.05);
+  const sc=(x,z,col)=>{box(c,.25,.35,.75,col,x,.12,z);cyl(c,.12,.12,.08,'#222',x,.05,z+.3,8).rotation.z=Math.PI/2;cyl(c,.12,.12,.08,'#222',x,.05,z-.3,8).rotation.z=Math.PI/2;};
+  sc(3,2,'#3f7f9a');sc(3.4,2.3,'#c43a32');
+  person(c,-1.4,2.6,'#a8673a');person(c,.2,2.8,'#5b6f8a');person(c,1.8,2.6,'#7c5b93');person(c,-.6,1.2,'#3f5e4c');
+  tree(c,-3.5,-.2,.8);tree(c,3.5,-1.4,.8);tree(c,-2.6,-3.2,.7,'pine');lamp(c,2.3,.6);lamp(c,-3,.9);
+};
+B.yide=c=>{
+  const g=new THREE.Group();g.position.set(-.3,0,-.8);c.add(g);
+  box(g,3,2.2,2.2,'#b0603f',0,0,0);box(g,3.15,.12,2.35,'#efe8d8',0,1.05,0);box(g,3.15,.14,2.35,'#efe8d8',0,2.15,0);
+  for(let i=0;i<4;i++){const x=-1.2+i*.8;cyl(g,.09,.09,1.05,'#f3ede0',x,0,1.2,8);cyl(g,.08,.08,1,'#f3ede0',x,1.15,1.2,8);}
+  box(g,3,.08,.35,'#e8e0cf',0,1.05,1.2);box(g,3,.08,.35,'#e8e0cf',0,2.12,1.2);
+  windows(g,3,1,2.2,1);const w2=new THREE.Group();w2.position.y=1.1;g.add(w2);windows(w2,3,1,2.2,1);windows(w2,3,1,2.2,-1);
+  const rg=new THREE.ConeGeometry(2.4,1.2,4);rg.rotateY(Math.PI/4);const r=mesh(rg,'#5b4a42',0,2.85,0,g);r.scale.z=.8;
+  // 眷村 row
+  for(let i=0;i<3;i++)house(c,-2.6+i*1.4,2.4,1.2,.9,.7,'#d9d2c2','#6a6f6a',0,{rh:.4});
+  // cafe
+  [[2.4,1.4],[3.1,.2]].forEach(([x,z])=>{cyl(c,.03,.03,1.1,'#555',x,0,z,4);cone(c,.6,.35,'#efe8d8',x,1.05,z,8);disc(c,.25,'#d9d2c2',x,z,.45,8);});
+  tree(c,2.3,-2.4,1.5);tree(c,-3.4,-.4,.9);tree(c,3.6,2.4,.7,'pine');
+  person(c,2.8,1,'#3f5e4c');person(c,1.5,1.9,'#a8673a');lamp(c,1.3,.4);
+};
+B.tub=c=>{
+  disc(c,2.8,'#4fc1c0',0,0,.05,24);
+  const COR=['#e86f8c','#f29a4a','#9b6fc6','#f2c94c','#ef5f5f'];
+  for(let i=0;i<14;i++){const a=i/14*Math.PI*2,r=2+rnd()*.6;const col=COR[i%COR.length];
+    if(i%2)ball(c,.18+rnd()*.12,col,Math.cos(a)*r,.12,Math.sin(a)*r);else cone(c,.14,.5,col,Math.cos(a)*r,0,Math.sin(a)*r,5);}
+  // fish
+  const fish=new THREE.Group();c.add(fish);
+  for(let i=0;i<5;i++){const f=cone(fish,.08,.3,i%2?'#f29a4a':'#ffffff',Math.cos(i*1.26)*1.2,.1,Math.sin(i*1.26)*1.2,4);f.rotation.z=Math.PI/2;f.rotation.y=-i*1.26;}
+  anim.push((t,dt)=>{fish.rotation.y+=dt*.5;});
+  // ranger station on stilts
+  const st=new THREE.Group();st.position.set(-2.9,0,-2.1);c.add(st);
+  [[-.5,-.4],[.5,-.4],[-.5,.4],[.5,.4]].forEach(([x,z])=>cyl(st,.06,.06,1,'#7a5b3e',x,0,z,5));
+  house(st,0,0,1.3,1,.7,'#e9e2d0','#3f7f9a',0,{rh:.5});st.children.at(-1).position.y=1;
+  // lighthouse
+  cyl(c,.32,.42,2.6,'#f4f1ea',3,0,-1.6,10);cyl(c,.33,.36,.35,'#c43a32',3,1.2,-1.6,10);mesh(new THREE.SphereGeometry(.22,8,6),lampMat,3,2.8,-1.6,c);cone(c,.38,.4,'#c43a32',3,2.95,-1.6,10);
+  tree(c,-3.4,1.3,.9,'palm');tree(c,2.6,2.4,.85,'palm');tree(c,-1,3.6,.8,'palm');
+  // dive boat
+  const bt=new THREE.Group();c.add(bt);
+  box(bt,.9,.4,2.2,'#f4f1ea',0,0,0);box(bt,.7,.45,.8,'#3f7f9a',0,.4,-.2);box(bt,.92,.06,2.22,'#2a9a96',0,.18,0);
+  anim.push(t=>{bt.position.set(5.9,WATER-TOP+.05+Math.sin(t*1.6)*.06,1.5);bt.rotation.z=Math.sin(t*1.3)*.05;});
+};
+B.thu=c=>{
+  strip(c,-4.2,.4,3.2,.4,1,'#d8cdb6',.03);
+  for(let i=0;i<6;i++){tree(c,-3.6+i*1.2,-.45,.75);tree(c,-3.6+i*1.2,1.25,.75);}
+  // chapel-like curved tent
+  const sh=new THREE.Shape();sh.moveTo(-1.5,0);sh.quadraticCurveTo(-.25,.6,0,4.3);sh.quadraticCurveTo(.25,.6,1.5,0);sh.closePath();
+  const geo=new THREE.ExtrudeGeometry(sh,{depth:2.2,bevelEnabled:false});geo.translate(0,0,-1.1);
+  const ch=mesh(geo,'#d9b45a',2.2,0,-2.2,c);ch.rotation.y=.35;
+  box(c,.08,4.1,.08,'#f3ead8',2.2,0,-2.2);
+  // low traditional buildings
+  house(c,-2.2,-2.6,2.6,1.1,.8,'#d8d0c0','#4e524f',0,{hip:true,rh:.6});
+  house(c,-1.4,2.8,2.8,1,.8,'#d8d0c0','#4e524f',0,{hip:true,rh:.6});
+  // cow (東海牧場)
+  const cw=new THREE.Group();cw.position.set(2.6,0,2.6);cw.rotation.y=-.8;c.add(cw);
+  box(cw,.9,.45,.45,'#f4f1ea',0,.35,0);box(cw,.3,.3,.3,'#f4f1ea',.55,.55,0);box(cw,.3,.3,.47,'#2b2b2b',-.1,.4,0);
+  [[-.3,-.15],[.3,-.15],[-.3,.15],[.3,.15]].forEach(([x,z])=>box(cw,.1,.35,.1,'#f4f1ea',x,0,z));
+  person(c,-.6,.4,'#3f5e4c');person(c,.6,.5,'#c9a12e');lamp(c,3.4,.4);
+};
+B.oldcity=c=>{
+  // rails
+  [-2.75,-2.25].forEach(z=>strip(c,-4.3,z,4.3,z,.07,'#555',.04,.08));
+  for(let i=0;i<14;i++)box(c,.16,.05,.9,'#7a5b3e',-4+i*.62,0,-2.5);
+  const tr=new THREE.Group();c.add(tr);
+  const lo=new THREE.Group();tr.add(lo);cyl(lo,.3,.3,1.2,'#2b2b2b',0,0,0,10).rotation.z=Math.PI/2;lo.children[0].position.set(0,.5,0);
+  box(lo,.6,.75,.65,'#3a3a3a',-.75,.15,0);cyl(lo,.1,.12,.4,'#2b2b2b',.35,.75,0,6);
+  box(tr,1.2,.65,.62,'#7b3a2e',-1.8,.15,0);box(tr,1.2,.65,.62,'#7b3a2e',-3.15,.15,0);
+  anim.push(t=>{tr.position.set(1.2+Math.sin(t*.35)*1.6,0,-2.5);});
+  // station
+  const s=new THREE.Group();s.position.set(0,0,-.6);c.add(s);
+  box(s,4,1.5,1.4,'#b65a3c',0,0,0);box(s,4.1,.1,1.5,'#efe8d8',0,.75,0);box(s,4.1,.12,1.5,'#efe8d8',0,1.48,0);
+  house(s,-1.3,0,1.4,1.4,0,'#b65a3c','#4b3d36',Math.PI/2,{rh:.7,door:false}).position.y=1.5;
+  house(s,1.3,0,1.4,1.4,0,'#b65a3c','#4b3d36',Math.PI/2,{rh:.7,door:false}).position.y=1.5;
+  box(s,.9,2.9,.9,'#b65a3c',0,0,.1);box(s,1,.1,1,'#efe8d8',0,2.2,.1);
+  const cr=new THREE.ConeGeometry(.72,1.1,4);cr.rotateY(Math.PI/4);mesh(cr,'#4b3d36',0,3.45,.1,s);
+  const ck=cyl(s,.28,.28,.05,'#f4f1ea',0,2.35,.58,16);ck.rotation.x=Math.PI/2;
+  windows(s,4,1.5,1.4,1);box(s,.6,.8,.06,'#4a3a2e',0,0,.73);
+  // shophouses
+  const cols=['#e6d8bf','#cfc0a6','#e9dfcc','#d6c4a8','#e2d2b8'];
+  for(let i=0;i<5;i++){const x=-3+i*1.25;const h=1.3+((i*7)%3)*.25;box(c,1.15,h,1,cols[i],x,0,2.6);box(c,1.15,.5,.1,'#3a342e',x,0,3.12);box(c,1.2,.12,1.05,'#8a5a40',x,h,2.6);
+    const g=new THREE.Group();g.position.set(x,0,2.6);c.add(g);mesh(new THREE.BoxGeometry(.5,.3,.05),winMat,0,h*.68,.52,g);}
+  person(c,-1.5,1.3,'#5b6f8a');person(c,.9,1.5,'#a8673a');person(c,2.3,1.2,'#3f5e4c');lamp(c,-2.6,1.4);lamp(c,2.6,1.4);
+  tree(c,3.8,.6,.7);tree(c,-3.9,.4,.7);
+};
+
+/* ---- islands ---- */
+const islands={}, pickables=[];
+function island(id,pos,o={}){
+  const g=new THREE.Group();g.position.copy(pos);scene.add(g);
+  const grass=o.grass||'#a7bf7f';
+  mesh(new THREE.CylinderGeometry(S,S,.6,6),grass,0,0,0,g);
+  const band=mesh(new THREE.CylinderGeometry(S*.99,S*.985,.16,6),o.color||'#3f5e4c',0,-.38,0,g);band.castShadow=false;
+  mesh(new THREE.CylinderGeometry(S*.985,S*.93,1.0,6),'#b89c74',0,-.96,0,g);
+  mesh(new THREE.CylinderGeometry(S*.93,S*.5,2.8,6),'#7d6f5f',0,-2.86,0,g);
+  const c=new THREE.Group();c.position.y=TOP;g.add(c);B[id](c);
+  g.userData.id=id; islands[id]={g,base:pos.clone(),lift:0}; pickables.push(g);
+  return g;
+}
+const hubPos=axPos(0,0);
+island('hub',hubPos,{color:'#3f5e4c',grass:'#b3c788'});
+STORIES.forEach(s=>{s.pos3=s.ax?axPos(...s.ax):new THREE.Vector3(...s.pos);island(s.id,s.pos3,{color:s.color,grass:s.id==='tub'?'#e8d9ae':s.id==='earth'?'#b9bf86':undefined});});
+
+/* ---- bridges ---- */
+function bridge(a,b){
+  const A=islands[a].base,Bp=islands[b].base,dir=Bp.clone().sub(A).setY(0).normalize();
+  const fa=S*.866-.5, p1=A.clone().addScaledVector(dir,fa), p2=Bp.clone().addScaledVector(dir,-fa);
+  const L=p1.distanceTo(p2), g=new THREE.Group();g.position.copy(p1.clone().add(p2).multiplyScalar(.5));g.position.y=TOP-.1;g.rotation.y=Math.atan2(dir.x,dir.z);scene.add(g);
+  box(g,1.3,.14,L,'#c8a774',0,0,0);
+  for(let i=0;i<Math.floor(L/.5);i++)box(g,1.32,.02,.05,'#a88758',0,.14,-L/2+.25+i*.5);
+  [-.62,.62].forEach(x=>{box(g,.06,.06,L,'#9c7b52',x,.62,0);for(let k=0;k<=Math.floor(L/.9);k++)box(g,.07,.62,.07,'#8a6a48',x,0,-L/2+k*(L/Math.floor(L/.9)));});
+}
+['dmp','ershui','thu','oldcity','yide','market'].forEach(id=>bridge('hub',id));
+bridge('dmp','mine');bridge('market','earth');bridge('ershui','thu');bridge('yide','oldcity');
+
+/* ---- sea route to Tubbataha ---- */
+const rA=islands.oldcity.base, rB=islands.tub.base;
+const route=new THREE.CatmullRomCurve3([rA.clone().add(new THREE.Vector3(4,0,3)),new THREE.Vector3(16,0,22),new THREE.Vector3(24,0,27),rB.clone().add(new THREE.Vector3(-5,0,-1))]);
+route.points.forEach(p=>p.y=WATER+.12);
+const rl=new THREE.Line(new THREE.BufferGeometry().setFromPoints(route.getPoints(80)),new THREE.LineDashedMaterial({color:'#ffffff',dashSize:.8,gapSize:.6,transparent:true,opacity:.75}));rl.computeLineDistances();scene.add(rl);
+const ferry=new THREE.Group();scene.add(ferry);box(ferry,.7,.3,1.5,'#f4f1ea',0,0,0);box(ferry,.5,.35,.5,'#a8673a',0,.3,-.1);
+anim.push(t=>{const k=(t*.025)%1, p=route.getPointAt(k), q=route.getPointAt(Math.min(.999,k+.01));ferry.position.set(p.x,WATER+.05+Math.sin(t*2)*.05,p.z);ferry.lookAt(q.x,ferry.position.y,q.z);});
+
+/* ---- theme arcs ---- */
+const themeGroup=new THREE.Group();themeGroup.visible=false;scene.add(themeGroup);
+Object.values(THEMES).forEach((th,ti)=>{
+  for(let i=0;i<th.ids.length-1;i++){
+    const a=islands[th.ids[i]].base.clone(),b=islands[th.ids[i+1]].base.clone();a.y=b.y=2.2+ti*.25;
+    const m=a.clone().add(b).multiplyScalar(.5);m.y+=4+a.distanceTo(b)*.28+ti*.8;
+    const cv=new THREE.QuadraticBezierCurve3(a,m,b);
+    themeGroup.add(new THREE.Mesh(new THREE.TubeGeometry(cv,48,.11,6),new THREE.MeshBasicMaterial({color:th.color,transparent:true,opacity:.9})));
+    [a,b].forEach(p=>{const s=new THREE.Mesh(new THREE.SphereGeometry(.22,10,8),new THREE.MeshBasicMaterial({color:th.color}));s.position.copy(p);themeGroup.add(s);});
+  }
+});
+
+/* ---- sea, mountains, islets ---- */
+const waterGeo=new THREE.PlaneGeometry(420,420,90,90);waterGeo.rotateX(-Math.PI/2);
+const waterMat=new THREE.MeshStandardMaterial({color:'#7fb0ad',roughness:.55,metalness:.05,flatShading:true});
+const water=new THREE.Mesh(waterGeo,waterMat);water.position.y=WATER;water.receiveShadow=true;scene.add(water);
+const wp=waterGeo.attributes.position;let wFrame=0;
+anim.push(t=>{if(++wFrame%2)return;for(let i=0;i<wp.count;i++){const x=wp.getX(i),z=wp.getZ(i);wp.setY(i,Math.sin(x*.16+t*.9)*.13+Math.cos(z*.19+t*1.1)*.11);}wp.needsUpdate=true;waterGeo.computeVertexNormals();});
+for(let i=0;i<26;i++){const a=-Math.PI*.95+i/25*Math.PI*.9+(rnd()-.5)*.1, r=95+rnd()*45, h=14+rnd()*26;
+  const m=cone(scene,10+rnd()*12,h,i%3?'#7e8f6a':'#6f805e',Math.cos(a)*r,WATER-1,Math.sin(a)*r,5+Math.floor(rnd()*3));m.castShadow=false;m.rotation.y=rnd()*3;}
+[[-34,-14],[-30,18],[22,-26],[40,6],[-12,32],[-44,2],[12,40]].forEach(([x,z],i)=>{const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);
+  const r=1.6+rnd()*1.2;cyl(g,r,r*.85,1.4,'#a7bf7f',0,WATER-.9,0,8);cyl(g,r*.85,r*.4,1.6,'#7d6f5f',0,WATER-2.5,0,8);
+  const c=new THREE.Group();c.position.y=WATER+.5;g.add(c);tree(c,0,0,.9+rnd()*.4,i%2?'pine':'round');});
+
+/* ---- selection ring ---- */
+const rg=new THREE.RingGeometry(S+.25,S+.75,6);rg.rotateZ(Math.PI/6);rg.rotateX(-Math.PI/2);
+const ring=new THREE.Mesh(rg,new THREE.MeshBasicMaterial({color:'#f4d27a',transparent:true,opacity:.95}));ring.visible=false;scene.add(ring);
+
+/* ---- labels ---- */
+const labels=$('labels'), labEls={};
+const mkLab=(id,text,color,cls='')=>{const d=document.createElement('div');d.className='lab '+cls;d.innerHTML=`<span class="dot" style="background:${color}"></span>${text}<span class="ok"></span>`;d.onclick=()=>{stopTour();select(id);};labels.appendChild(d);labEls[id]=d;};
+mkLab('hub','景觀故事 ・ 課程','#fff','hub');
+STORIES.forEach(s=>mkLab(s.id,`${s.no}. ${s.short}`,s.color));
+function syncLabels(){STORIES.forEach(s=>{labEls[s.id].classList.toggle('sel',s.id===selected);labEls[s.id].querySelector('.ok').textContent=visited.has(s.id)?'✓':'';});
+  ring.visible=!!selected; if(selected){const p=islands[selected].base;ring.position.set(p.x,TOP+.02,p.z);}}
+syncSelHooks.push(syncLabels);syncLabels();
+
+/* ---- picking ---- */
+const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();let down=null,hover=null,mv=null;
+function pick(x,y){const r=canvas.getBoundingClientRect();ndc.set((x-r.left)/r.width*2-1,-(y-r.top)/r.height*2+1);ray.setFromCamera(ndc,camera);
+  for(const h of ray.intersectObjects(pickables,true)){let o=h.object;while(o&&!o.userData.id)o=o.parent;if(o)return o.userData.id;}return null;}
+canvas.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};fly=null;stopTour();canvas.style.cursor='grabbing';});
+canvas.addEventListener('pointerup',e=>{canvas.style.cursor=hover?'pointer':'grab';if(!down)return;if(Math.hypot(e.clientX-down.x,e.clientY-down.y)<6){const id=pick(e.clientX,e.clientY);if(id)select(id);}down=null;});
+canvas.addEventListener('pointermove',e=>{mv=e;});
+canvas.addEventListener('wheel',()=>{fly=null;stopTour();},{passive:true});
+
+/* ---- camera fly ---- */
+let fly=null;const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function flyRaw(toT,toP,dur=1.4){fly={t:0,dur,fT:controls.target.clone(),fP:camera.position.clone(),toT,toP};}
+function flyTo(pos,dist=28){const sp=new THREE.Spherical().setFromVector3(camera.position.clone().sub(controls.target));sp.phi=THREE.MathUtils.clamp(sp.phi,.72,1.0);sp.radius=dist;
+  const toT=pos.clone().setY(0);flyRaw(toT,toT.clone().add(new THREE.Vector3().setFromSpherical(sp)));}
+function home(){flyRaw(HOME_T.clone(),HOME_P.clone(),1.6);}
+function zoom(f){const off=camera.position.clone().sub(controls.target);const L=THREE.MathUtils.clamp(off.length()*f,controls.minDistance,controls.maxDistance);flyRaw(controls.target.clone(),controls.target.clone().add(off.setLength(L)),.5);}
+
+/* ---- day / night ---- */
+const DAY={bg:new THREE.Color('#cfe0dc'),water:new THREE.Color('#7fb0ad'),sky:new THREE.Color('#ffffff'),gnd:new THREE.Color('#8a9a7a'),hemi:1.0,sunC:new THREE.Color('#fff3dd'),sun:2.0};
+const NIGHT={bg:new THREE.Color('#1a2630'),water:new THREE.Color('#22363f'),sky:new THREE.Color('#5d7396'),gnd:new THREE.Color('#2a3330'),hemi:.35,sunC:new THREE.Color('#9fb5d9'),sun:.45};
+let nt=0;const tmp=new THREE.Color();
+function applyNight(k){scene.background.copy(DAY.bg).lerp(NIGHT.bg,k);scene.fog.color.copy(scene.background);stage.style.background='#'+scene.background.getHexString();
+  waterMat.color.copy(DAY.water).lerp(NIGHT.water,k);hemi.color.copy(DAY.sky).lerp(NIGHT.sky,k);hemi.groundColor.copy(DAY.gnd).lerp(NIGHT.gnd,k);hemi.intensity=THREE.MathUtils.lerp(DAY.hemi,NIGHT.hemi,k);
+  sun.color.copy(DAY.sunC).lerp(NIGHT.sunC,k);sun.intensity=THREE.MathUtils.lerp(DAY.sun,NIGHT.sun,k);winMat.emissiveIntensity=k*1.7;lampMat.emissiveIntensity=k*2.4;hubLight.intensity=k*30;}
+applyNight(0);
+
+/* ---- resize & loop ---- */
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+new ResizeObserver(resize).observe(stage);resize();
+const clock=new THREE.Clock(),v=new THREE.Vector3();
+function loop(){
+  const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
+  if(mv){hover=pick(mv.clientX,mv.clientY);if(!down)canvas.style.cursor=hover?'pointer':'grab';mv=null;}
+  if(fly){fly.t+=dt/fly.dur;const e=ease(Math.min(1,fly.t));controls.target.lerpVectors(fly.fT,fly.toT,e);camera.position.lerpVectors(fly.fP,fly.toP,e);if(fly.t>=1)fly=null;}
+  controls.update();
+  const tgt=night?1:0;if(Math.abs(nt-tgt)>.001){nt+=(tgt-nt)*Math.min(1,dt*3);applyNight(nt);}
+  for(const id in islands){const I=islands[id],want=(id===hover||id===selected)?.35:0;I.lift+=(want-I.lift)*Math.min(1,dt*8);I.g.position.y=I.base.y+I.lift;}
+  if(selected)ring.position.y=TOP+.02+islands[selected].lift;
+  anim.forEach(f=>f(t,dt));
+  const w=stage.clientWidth,h=stage.clientHeight;
+  for(const id in labEls){const I=islands[id];v.set(I.base.x,I.g.position.y+(id==='hub'?4.2:4.6),I.base.z).project(camera);
+    const el=labEls[id];if(v.z>1||mode!=='3d'){el.style.visibility='hidden';continue;}el.style.visibility='';
+    el.style.transform=`translate(${((v.x+1)/2*w).toFixed(1)}px,${((1-v.y)/2*h).toFixed(1)}px) translate(-50%,-100%)`;}
+  renderer.render(scene,camera);requestAnimationFrame(loop);
+}
+loop();
+return {flyTo,home,zoom,hubPos,posOf:id=>islands[id].base,setThemes:on=>{themeGroup.visible=on;}};
+}
+</script>
+</body>
+</html>
